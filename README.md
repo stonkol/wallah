@@ -6,6 +6,15 @@ A none-resource-consuming, app-free, zero-dependency alternative to app [Top Not
 
 ## TODO
 
-- [ ] Add the 12" Mac Book Air and 16" MBP version.
 - [ ] Make a script to rmv the notch of a wallpaper.
+
 - [ ] cli tool to update a unnotch wallpaper with the color you want
+
+- [ ] dark mode script
+    - a script to change the color of the wall according to system settings.
+    - let the user setting if
+
+- Add other versions
+    - [] Include the 16 ANSI colors
+    - [] and 16" MBP version.
+    - [] 13" and 15" Mac Book Air
