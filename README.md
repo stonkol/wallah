@@ -1,4 +1,4 @@
-# rmv-mbp-notch
+# wall-cli
 
 Wallpaper maker for removing the top notch and rounding the lower corners.
 
@@ -6,29 +6,35 @@ A none-resource-consuming, app-free, zero-dependency alternative to app [Top Not
 
 You also can adjust your own colors or put your own images on the
 
-## wall-cli
-
 A CLI app for changing the color of your wallpaper.
 
-### The colors
+## The colors
 
 Example of one of the wallpapers (bright blue):
 
 <img src="wallpapers/mbp-14/b-blue.png" max-width="350px">
 
-#### ANSI 16
+### ANSI 16
 
-The basic 8:
+The basic 8 colors, by default is the dark mode version:
 `black`, `red`, `green`, `yellow`, `blue`, `magenta`, `cyan`, `white`.
 
-And their bright versions:
+If you want their bright versions add an "b-":
 `b-black`, `b-red`, `b-green`, `b-yellow`, `b-blue`, `b-magenta`, `b-cyan`, `b-white`.
 
-<img src="wallpapers/mbp-14/ansi.png" max-width="400px">
+<div align="center">
+<img src="wallpapers/ansi-16.png" max-width="400px">
+</div>
 
-2. Colors of 8 Characters: `pikachu`, `charmander`, `stitchy`, `yoshi`, `blender`, `kirby`, `teddy`, `wario`.
+### CHAR 16
 
-<img src="wallpapers/mbp-14/pokemon.png" max-width="250px">
+Based on 8 famous characters, each with their own light and dark mode.
+
+`pikachu`, `charmander`, `stitchy`, `yoshi`, `blender`, `kirby`, `teddy`, `wario`.
+
+<div align="center">
+<img src="wallpapers/char16.png" max-width="400px">
+</div>
 
 ### Usage
 
@@ -40,7 +46,6 @@ wall b-blue   # set bright blue (#5C5CFF)
 1. macOS requires explicit permission for apps (including Terminal or the compiled CLI binary) to change the wallpaper
 
 1. macOS may ask to accept permissions the first time your run the application.
-
 
 ### Having problems
 
@@ -58,6 +63,7 @@ osascript -e 'tell application "System Events" to set picture of every desktop t
 ```
 
 #### Run the command as the logged-in user
+
 If you run your Go program as root or via sudo, the AppleScript may run as root and fail to change the wallpaper for the logged-in user.
 Make sure you run the CLI as the current logged-in user.
 
@@ -88,11 +94,13 @@ To run the app globally, you can move the built executable to a directory in you
 
 ## TODO
 
-- Make a script to rmv the notch of a wallpaper.
-    - [x] improve flags
+- The wall CLI to change wallpapers.
+    - [x] Improve flags
     - [ ] Have colored text on the CLI
-
-- [ ] cli tool to update a unnotch wallpaper with the color you want
+    - [ ] Let users change the path of the wallpapers
+    - [ ] Let users users set the wallpaper for dark mode and light mode, which will change according to the system settings.
+    - [ ] include a `-d` `--dark` and `-l` `--light` flags for toggling mode
+    - [ ] Let user enable/disable auto-light/dark mode.
 
 - [ ] dark mode script
     - a script to change the color of the wall according to system settings.
@@ -105,5 +113,3 @@ To run the app globally, you can move the built executable to a directory in you
     - [ ] Colors of 8 Characters
 
 ## Acknowledgements
-
-The Pikachu GIF used above, provided by the [PokeAPI](https://github.com/PokeAPI/sprites) sprites repository are the property of The Pokémon Company. All rights to the Pokémon characters and related artwork are owned by The Pokémon Company.

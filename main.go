@@ -49,15 +49,16 @@ Flags:
 		Run: func(cmd *cobra.Command, args []string) {
 
 			/////////////// LIST FLAG ///////////////////
-			// a slice of the colors in order, instead of output the map itself (which is random)
+			// a slice of the colors in order,
+			// instead of output the map itself (which is random)
 			var wallpaperOrder = []string{
-				"b-black",
-				"b-blue",
-				"b-cyan",
-				"b-green",
-				"b-magenta",
-				"b-red",
-				"b-white",
+				"black-b",
+				"blue-b",
+				"cyan-b",
+				"green-b",
+				"magenta-b",
+				"red-b",
+				"white-b",
 
 				"black",
 				"blue",
@@ -106,7 +107,7 @@ Flags:
 	}
 
 	// Add a --list flag
-	rootCmd.Flags().BoolP("list", "l", false, "List available colors")
+	rootCmd.Flags().BoolP("list", "l", false, "list available colors")
 
 	// Set custom help template
 	rootCmd.SetHelpTemplate(customHelpTemplate)
