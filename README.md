@@ -1,3 +1,7 @@
+![Build Status](https://github.com/stonkol/wallah/actions/workflows/go.yml/badge.svg)
+
+![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/stonkol/wall-cli?sort=semver)
+
 <div align="center">
 <img src="assets/wallah-logo.png" width="50%">
 </div>
