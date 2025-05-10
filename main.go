@@ -7,7 +7,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var version = "v0.1.1" // default version
+var version = "v0.1.15" // default version
 
 func main() {
 	// custom help template, replace cobra's help
@@ -23,26 +23,32 @@ Flags:
 	// Define the root command for the CLI app using Cobra
 	var rootCmd = &cobra.Command{
 		// users will type `wall` on the Command Line
-		Use:   "wall",
+		Use:   "wallah",
 		Short: "A fast and simple CLI to change your macOS wallpaper and elegantly hide that ugly notch 🌀", // A short description
 
-		Long: "\nHi I'm Wall, I will help you to change your wallpaper to your desire color and get ride of that notch.\n\nWith Wall you can easily apply wallpapers featuring solid colors and rounded borders that blend seamlessly around the notch area.\n\nSimply run the command with your preferred color\n\nExample:\n  wall [color]\n",
+		Long: "\nHi I'm Wallah, I will help you to change your wallpaper to your desire color and get ride of that notch.\n\nWith wallah you can easily apply wallpapers featuring solid colors and rounded borders that blend seamlessly around the notch area.\n\nExample:\n  wallah [color]\n",
 
 		Args: func(cmd *cobra.Command, args []string) error {
 			listFlag, err := cmd.Flags().GetBool("list")
 			if err != nil {
 				return err
 			}
-			if listFlag {
-				// --list flag used, no positional args allowed
+			versionFlag, err := cmd.Flags().GetBool("version")
+			if err != nil {
+				return err
+			}
+
+			if listFlag || versionFlag {
+				// If either --list or --version is set, no positional args allowed
 				if len(args) != 0 {
-					return fmt.Errorf("no arguments allowed when using --list")
+					return fmt.Errorf("no arguments allowed when using --list or --version")
 				}
 				return nil
 			}
+
 			// --list not used, require exactly one argument
 			if len(args) != 1 {
-				return fmt.Errorf("requires exactly one color argument")
+				return fmt.Errorf("requires exactly one argument")
 			}
 			return nil
 		},
@@ -95,7 +101,7 @@ Flags:
 				os.Exit(1)
 			}
 			if versionFlag {
-				fmt.Println("wall version", version)
+				fmt.Println("wallah version", version)
 				return
 			}
 
@@ -132,14 +138,14 @@ Flags:
 			}
 
 			// If successful, print
-			fmt.Println("  Your wall is now", color, "🤟")
+			fmt.Println("  Your wallah is now", color, "🤟")
 		},
 	}
 
 	// Add flags
 	rootCmd.Flags().BoolP("list", "l", false, "list available colors")
 
-	rootCmd.Flags().BoolP("version", "v", false, "Print the version number")
+	rootCmd.Flags().BoolP("version", "v", false, "current version")
 
 	// Set custom help template
 	rootCmd.SetHelpTemplate(customHelpTemplate)

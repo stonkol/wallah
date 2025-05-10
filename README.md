@@ -1,5 +1,4 @@
 <div align="center">
-<!--     <h1>wall-cli</h1> -->
 
 <img src="assets/wall-logo.png" width="50%">
 
@@ -7,7 +6,7 @@
 
 </div>
 
-`wall-cli` is a fast and simple CLI to change your macOS wallpaper and elegantly hide that ugly notch. The minimal alternative to app [Top Notch](https://topnotch.app/). Inspired by [removethenotch](removethenotch.com).
+wallah-cli is a fast and simple CLI to change your macOS wallpaper and elegantly hide that ugly notch. The minimal alternative to app [Top Notch](https://topnotch.app/). Inspired by [removethenotch](removethenotch.com).
 
 ### Installation
 
@@ -18,7 +17,7 @@ go install github.com/stonkol/wall-cli@latest
 
 If it is installed correctly this will set your wallpaper to blue:
 ```sh
-wall blue
+wallah blue
 ```
 
 ## Index
@@ -38,26 +37,29 @@ wall blue
 
 Build it (in your project directory run):
 ```sh
-go build -o wall # compiles the Go code into an executable named wall
+go build -o wallah # compiles the Go code into an executable named wallah
 ```
+
+> [!caution] Caution
+> Don't use `wall` or other name that is used for a standard Unix/Linux command.
 
 ### 1.2 Move the Binary
 
 Move the binary to a directory in your PATH, to run the app globally:
 ```sh
-sudo mv wall /usr/local/bin/
-sudo chmod +x /usr/local/bin/wall # make the file executable
+sudo mv wallah /usr/local/bin/
+sudo chmod +x /usr/local/bin/wallah # make the file executable
 ```
 
 ### 1.3 Try it out
 
 ```sh
-wall -v        # show version
-wall -h        # show help
-wall -l        # show list of colors available
-wall blue      # set blue (#0000EE)
-wall blue-b    # set bright blue (#5C5CFF)
-wall pikachu   # set pikachu color (#F8A21C)
+wallah -v        # show version
+wallah -h        # show help
+wallah -l        # show list of colors available
+wallah blue      # set blue (#0000EE)
+wallah blue-b    # set bright blue (#5C5CFF)
+wallah pikachu   # set pikachu color (#F8A21C)
 ```
 
 1. macOS may requires explicit permission for apps (including Terminal or the compiled CLI binary) to change the wallpaper.
@@ -73,11 +75,9 @@ Example of one of the wallpapers (bright blue):
 
 ### 2.1 ANSI 16
 
-The basic 8 colors, by default is the dark mode version:
-`black`, `red`, `green`, `yellow`, `blue`, `magenta`, `cyan`, `white`.
+The basic 8 colors, by default is the dark mode version. Add `b-` prefix for bright(light) versions (`b-blue`).
 
-If you want their bright versions add an "b-":
-`b-black`, `b-red`, `b-green`, `b-yellow`, `b-blue`, `b-magenta`, `b-cyan`, `b-white`.
+`black`, `red`, `green`, `yellow`, `blue`, `magenta`, `cyan` and `white`.
 
 <div align="center">
 <img src="assets/ansi-16.png" width="50%">
@@ -85,9 +85,9 @@ If you want their bright versions add an "b-":
 
 ### 2.2 CHAR 16
 
-Based on 8 famous characters, each with their own light and dark mode.
+Based on 8 famous characters, each with their own light and dark mode. Add `b-` prefix for bright(light) versions (`b-pikachu`).
 
-`pikachu`, `charmander`, `stitchy`, `yoshi`, `blender`, `kirby`, `teddy`, `wario`.
+`pikachu`, `akira`, `stitchy`, `yoshi`, `blender`, `kirby`, `teddy`, `wario`.
 
 <div align="center">
 <img src="assets/char-16.png" width="50%">
@@ -122,7 +122,7 @@ Make sure you run the CLI as the current logged-in user.
 
 ## 5. Roadmap
 
-- The wall CLI to change wallpapers.
+- The wallah CLI to change wallpapers.
     - [x] --help flag
     - [x] --list flag
     - [ ] Have colored text on the CLI
