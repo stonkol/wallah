@@ -6,18 +6,15 @@ A none-resource-consuming, app-free, zero-dependency alternative to app [Top Not
 
 You also can adjust your own colors or put your own images on the
 
-## Colors
-
-Example of a screen
-
-<img src="wallpapers/mbp-14/salmon.png" max-width="350px">
-
-
 ## wall-cli
 
 A CLI app for changing the color of your wallpaper.
 
 ### The colors
+
+Example of one of the wallpapers (bright blue):
+
+<img src="wallpapers/mbp-14/b-blue.png" max-width="350px">
 
 #### ANSI 16
 
@@ -40,12 +37,36 @@ wall blue      # set blue (#0000EE)
 wall b-blue   # set bright blue (#5C5CFF)
 ```
 
+1. macOS requires explicit permission for apps (including Terminal or the compiled CLI binary) to change the wallpaper
+
+1. macOS may ask to accept permissions the first time your run the application.
+
+
+### Having problems
+
+#### Only changed on one deskptop?
+
+On newer macOS versions (Ventura, Sonoma), wallpaper management changed:
+The wallpaper might only change on the current desktop/space.
+You might need to set wallpaper for each desktop separately.
+
+#### Running the AppleScript manually
+
+Test the AppleScript works with your wallpaper manually in the Terminal:
+```sh
+osascript -e 'tell application "System Events" to set picture of every desktop to POSIX file "/absolute/path/to/image.jpg"'
+```
+
+#### Run the command as the logged-in user
+If you run your Go program as root or via sudo, the AppleScript may run as root and fail to change the wallpaper for the logged-in user.
+Make sure you run the CLI as the current logged-in user.
+
 ### How it works
 
 - Using `osascript` command to change the color of the wallpaper on macOS.
 - It runs AppleScript from Go using `os/exec` package.
 
-## Build and Run
+### Build and Run
 
 Build it (in your project directory run):
 ```sh
@@ -67,7 +88,9 @@ To run the app globally, you can move the built executable to a directory in you
 
 ## TODO
 
-- [ ] Make a script to rmv the notch of a wallpaper.
+- Make a script to rmv the notch of a wallpaper.
+    - [x] improve flags
+    - [ ] Have colored text on the CLI
 
 - [ ] cli tool to update a unnotch wallpaper with the color you want
 
