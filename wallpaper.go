@@ -8,6 +8,7 @@ import (
 )
 
 var Wallpapers = map[string]string{
+	// ansi 16
 	"black-b":   "wallpapers/mbp-14/black-b.png",
 	"blue-b":    "wallpapers/mbp-14/blue-b.png",
 	"cyan-b":    "wallpapers/mbp-14/cyan-b.png",
@@ -26,10 +27,24 @@ var Wallpapers = map[string]string{
 
 	"orange": "wallpapers/mbp-14/pikachu.png",
 
-	"charmander": "wallpapers/mbp-14/pikachu.png",
-	"pikachu":    "wallpapers/mbp-14/pikachu.png",
-	"stitchy":    "wallpapers/mbp-14/pikachu.png",
-	"kirby":      "wallpapers/mbp-14/pikachu.png",
+	// char 16
+	"akira":   "wallpapers/mbp-14/akira.png",
+	"blender": "wallpapers/mbp-14/blender.png",
+	"kirby":   "wallpapers/mbp-14/kirby.png",
+	"pikachu": "wallpapers/mbp-14/pikachu.png",
+	"stitchy": "wallpapers/mbp-14/stitchy.png",
+	"teddy":   "wallpapers/mbp-14/teddy.png",
+	"wario":   "wallpapers/mbp-14/wario.png",
+	"yoshi":   "wallpapers/mbp-14/yoshi.png",
+
+	"akira-b":   "wallpapers/mbp-14/akira-b.png",
+	"blender-b": "wallpapers/mbp-14/blender-b.png",
+	"kirby-b":   "wallpapers/mbp-14/kirby-b.png",
+	"pikachu-b": "wallpapers/mbp-14/pikachu-b.png",
+	"stitchy-b": "wallpapers/mbp-14/stitchy-b.png",
+	"teddy-b":   "wallpapers/mbp-14/teddy-b.png",
+	"wario-b":   "wallpapers/mbp-14/wario-b.png",
+	"yoshi-b":   "wallpapers/mbp-14/yoshi-b.png",
 }
 
 func changeWallpaper(color string) error {

@@ -7,6 +7,8 @@ import (
 	"github.com/spf13/cobra"
 )
 
+var version = "v0.1.1" // default version
+
 func main() {
 	// custom help template, replace cobra's help
 	const customHelpTemplate = `{{with (or .Long .Short)}}{{. | trimTrailingWhitespaces}}
@@ -48,10 +50,17 @@ Flags:
 		// The function to run when the command is executed
 		Run: func(cmd *cobra.Command, args []string) {
 
-			/////////////// LIST FLAG ///////////////////
+			/////////////// list colorsFLAG ///////////////////
 			// a slice of the colors in order,
 			// instead of output the map itself (which is random)
 			var wallpaperOrder = []string{
+				"black",
+				"blue",
+				"cyan",
+				"green",
+				"magenta",
+				"red",
+				"white",
 				"black-b",
 				"blue-b",
 				"cyan-b",
@@ -60,13 +69,34 @@ Flags:
 				"red-b",
 				"white-b",
 
-				"black",
-				"blue",
-				"cyan",
-				"green",
-				"magenta",
-				"red",
-				"white",
+				"akira",
+				"blender",
+				"kirby",
+				"pikachu",
+				"stitchy",
+				"teddy",
+				"wario",
+				"yoshi",
+
+				"akira-b",
+				"blender-b",
+				"kirby-b",
+				"pikachu-b",
+				"stitchy-b",
+				"teddy-b",
+				"wario-b",
+				"yoshi-b",
+			}
+
+			// Check if --version flag is set
+			versionFlag, err := cmd.Flags().GetBool("version")
+			if err != nil {
+				fmt.Println("Error reading flags:", err)
+				os.Exit(1)
+			}
+			if versionFlag {
+				fmt.Println("wall version", version)
+				return
 			}
 
 			// Check if --list flag is set
@@ -106,17 +136,13 @@ Flags:
 		},
 	}
 
-	// Add a --list flag
+	// Add flags
 	rootCmd.Flags().BoolP("list", "l", false, "list available colors")
+
+	rootCmd.Flags().BoolP("version", "v", false, "Print the version number")
 
 	// Set custom help template
 	rootCmd.SetHelpTemplate(customHelpTemplate)
-
-	// 	rootCmd.SetHelpTemplate(`{{with (or .Long .Short)}}{{. | trimTrailingWhitespaces}}
-
-	// {{end}}Flags:
-	// {{.Flags.FlagUsages | trimTrailingWhitespaces}}
-	// `)
 
 	// Execute the root command, which parses arguments and runs the Run function
 	if err := rootCmd.Execute(); err != nil {
