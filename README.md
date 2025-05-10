@@ -10,7 +10,7 @@ It is a minimal alternative to app [Top Notch](https://topnotch.app/), and it is
 
 You need to have Go installed. This command will compile and install the CLI tool in your system PATH.
 ```sh
-go install github.com/stonkol/wall-cli@latest
+go install github.com/stonkol/wallah@latest
 ```
 
 If it is installed correctly this will set your wallpaper to blue:

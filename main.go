@@ -48,7 +48,7 @@ Flags:
 
 			// --list not used, require exactly one argument
 			if len(args) != 1 {
-				return fmt.Errorf("requires exactly one argument")
+				return fmt.Errorf("requires exactly one argument.\n")
 			}
 			return nil
 		},
