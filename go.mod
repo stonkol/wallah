@@ -1,4 +1,4 @@
-module github.com/stonkol/wall-cli
+module github.com/stonkol/wallah
 
 go 1.24.1
 
