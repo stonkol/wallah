@@ -80,7 +80,7 @@ Example of one of the wallpapers (bright blue):
 
 The basic 8 colors, by default is the dark mode version. Add `b-` prefix for bright(light) versions (`b-blue`).
 
-`black`, `red`, `green`, `yellow`, `blue`, `magenta`, `cyan` and `white`.
+`black`, `blue`, `cyan`, `green`, `magenta`, `red`, `yellow` and `white`.
 
 <div align="center">
 <img src="assets/ansi-16.png" width="50%">
@@ -90,7 +90,7 @@ The basic 8 colors, by default is the dark mode version. Add `b-` prefix for bri
 
 Based on 8 famous characters, each with their own light and dark mode. Add `b-` prefix for bright(light) versions (`b-pikachu`).
 
-`pikachu`, `akira`, `stitchy`, `yoshi`, `blender`, `kirby`, `teddy`, `wario`.
+`akira`, `blender`, `grimace`, `kirby`, `pikachu`, `stitchy`, `teddy` and `yoshi`.
 
 <div align="center">
 <img src="assets/char-16.png" width="50%">
