@@ -1,4 +1,7 @@
+<div align="center">
 # wall-cli
+<img src="assets/wall-logo.png" width="50%">
+</div>
 
 A Wallpaper CLI for removing the top notch and rounding the corners. The minimal alternative to app [Top Notch](https://topnotch.app/). Inspired by [removethenotch](removethenotch.com). A none-resource-consuming, app-free, zero-dependency CLI.
 
@@ -63,7 +66,7 @@ If you want their bright versions add an "b-":
 `b-black`, `b-red`, `b-green`, `b-yellow`, `b-blue`, `b-magenta`, `b-cyan`, `b-white`.
 
 <div align="center">
-<img src="wallpapers/ansi-16.png" width="50%">
+<img src="assets/ansi-16.png" width="50%">
 </div>
 
 ### CHAR 16
@@ -73,7 +76,7 @@ Based on 8 famous characters, each with their own light and dark mode.
 `pikachu`, `charmander`, `stitchy`, `yoshi`, `blender`, `kirby`, `teddy`, `wario`.
 
 <div align="center">
-<img src="wallpapers/char-16.png" width="50%">
+<img src="assets/char-16.png" width="50%">
 </div>
 
 ## 3. Having problems?
