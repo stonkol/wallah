@@ -7,9 +7,9 @@
 <img src="assets/wallah-logo.png" width="50%">
 </div>
 
-wallah-cli is a CLI which you can change your macOS wallpaper, in which the menu bar part is black, in order to hide that ugly notch. Furthermore it is less distracting if you have auto-hide the menu bar.
+wallah-cli is a CLI which you can change your macOS wallpaper, in which the menu bar part is black, in order to hide that ugly notch. Furthermore, it is less distracting if you have the menu bar auto-hide enabled.
 
-It is a minimal alternative to app [Top Notch](https://topnotch.app/), and it is inspired by [removethenotch](removethenotch.com).
+It is a minimal alternative to the app [Top Notch](https://topnotch.app/), and it is inspired by [removethenotch](removethenotch.com).
 
 ### Installation
 
@@ -18,7 +18,7 @@ You need to have Go installed. This command will compile and install the CLI too
 go install github.com/stonkol/wallah@latest
 ```
 
-If it is installed correctly this will set your wallpaper to blue:
+If it is installed correctly, this will set your wallpaper to blue:
 ```sh
 wallah blue
 ```
@@ -65,7 +65,7 @@ wallah blue-b    # set bright blue (#5C5CFF)
 wallah pikachu   # set pikachu color (#F8A21C)
 ```
 
-1. macOS may requires explicit permission for apps (including Terminal or the compiled CLI binary) to change the wallpaper.
+1. macOS may require explicit permission for apps (including Terminal or the compiled CLI binary) to change the wallpaper.
 1. macOS may ask to accept permissions the first time your run the application.
 
 ## 2. Colors included
@@ -78,7 +78,7 @@ Example of one of the wallpapers (bright blue):
 
 ### 2.1 ANSI 16
 
-The basic 8 colors, by default is the dark mode version. Add `b-` prefix for bright(light) versions (`b-blue`).
+The basic 8 colors, by default, is the dark mode version. Add `b-` prefix for bright (light) versions (`b-blue`).
 
 `black`, `blue`, `cyan`, `green`, `magenta`, `red`, `yellow` and `white`.
 
@@ -88,7 +88,7 @@ The basic 8 colors, by default is the dark mode version. Add `b-` prefix for bri
 
 ### 2.2 CHAR 16
 
-Based on 8 famous characters, each with their own light and dark mode. Add `b-` prefix for bright(light) versions (`b-pikachu`).
+Based on 8 famous characters, each with their own light and dark mode. Add `b-` prefix for bright (light) versions (`b-pikachu`).
 
 `akira`, `blender`, `grimace`, `kirby`, `pikachu`, `stitchy`, `teddy` and `yoshi`.
 
@@ -103,33 +103,33 @@ Based on 8 famous characters, each with their own light and dark mode. Add `b-` 
     - [x] --list flag
     - [x] have a working binary working alone
     - [ ] Have colored text on the CLI
-    - [ ] Let users users set the wallpaper for dark mode and light mode, which will change according to the system settings.
+    - [ ] Let users set the wallpaper for dark mode and light mode, which will change according to the system settings.
     - [ ] include a `-d` `--dark` and `-l` `--light` flags for toggling mode
     - [ ] Let user enable/disable auto-light/dark mode.
     - [ ] Let users change the path of the wallpapers
 
-- [x] make a logo to put on the top of the README on Github
+- [x] make a logo to put on the top of the README on GitHub
 
 - [ ] dark mode script
-    - a script to change the color of the wall according to system settings.
-    - let the user setting if
+    - A script to change the color of the wall according to system settings.
+    - Let the user setting if
 
 - Add other versions
     - [ ] Include the 16 [ANSI colors](https://en.wikipedia.org/wiki/List_of_software_palettes)
     - [ ] 16" MBP version.
     - [ ] 13" and 15" MacBook Air
-    - [ ] Colors of 8 Characters
+    - [ ] Colors of 8 characters
 
 ## 4. How it works
 
 - Using `osascript` command to change the color of the wallpaper on macOS.
-- It runs AppleScript from Go using `os/exec` package.
+- It runs AppleScript from Go using the `os/exec` package.
 - All the default wallpapers are located in the `wallpapers` directory.
-- There is a `design-files` directory with the design files (`.psd` and `.afdesign`) used to create the wallpapers. In which you can use to create your own wallpapers, either with solid colors, gradients, or an image.
+- There is a `design-files` directory with the design files (`.psd` and `.afdesign`) used to create the wallpapers. Which you can use to create your own wallpapers, either with solid colors, gradients, or an image.
 
 ## 5. Having issues
 
-#### 5.1 Only changed on one deskptop?
+#### 5.1 Only changed on one desktop?
 
 On newer macOS versions (Ventura, Sonoma), wallpaper management changed:
 The wallpaper might only change on the current desktop/space.
@@ -150,4 +150,4 @@ Make sure you run the CLI as the current logged-in user.
 
 ## 6. Contributing
 
-Welcome to make a pull request or add an issue, but before please read the README.md before contributing. 😀
+Welcome to make a pull request or add an issue, but before, please read the README.md before contributing. 😀
