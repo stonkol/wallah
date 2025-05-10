@@ -12,7 +12,9 @@ A CLI app for changing the color of your wallpaper.
 
 Example of one of the wallpapers (bright blue):
 
-<img src="wallpapers/mbp-14/b-blue.png" max-width="350px">
+<div align="center">
+<img src="wallpapers/mbp-14/blue-b.png" max-width="300px">
+</div>
 
 ### ANSI 16
 
@@ -23,7 +25,7 @@ If you want their bright versions add an "b-":
 `b-black`, `b-red`, `b-green`, `b-yellow`, `b-blue`, `b-magenta`, `b-cyan`, `b-white`.
 
 <div align="center">
-<img src="wallpapers/ansi-16.png" max-width="400px">
+<img src="wallpapers/ansi-16.png" max-width="300px">
 </div>
 
 ### CHAR 16
@@ -33,7 +35,7 @@ Based on 8 famous characters, each with their own light and dark mode.
 `pikachu`, `charmander`, `stitchy`, `yoshi`, `blender`, `kirby`, `teddy`, `wario`.
 
 <div align="center">
-<img src="wallpapers/char16.png" max-width="400px">
+<img src="wallpapers/char-16.png" max-width="300px">
 </div>
 
 ### Usage
