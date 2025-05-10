@@ -2,12 +2,14 @@
 <!--     <h1>wall-cli</h1> -->
 
 <img src="assets/wall-logo.png" width="50%">
+
 <br>
+
 </div>
 
 `wall-cli` is a fast and simple cli to change your macOS wallpaper and elegantly hide that ugly notch  The minimal alternative to app [Top Notch](https://topnotch.app/). Inspired by [removethenotch](removethenotch.com).
 
-You also can adjust your own colors or put your own images
+Here is an example, selecting the blue color
 ```sh
 wall blue      # set blue (#0000EE)
 ```
