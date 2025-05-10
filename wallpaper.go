@@ -1,11 +1,14 @@
 package main
 
 import (
+	"embed"
 	"fmt"
 	"os"
 	"os/exec"
-	"path/filepath"
 )
+
+//go:embed wallpapers/mbp-14/*
+var wallpaperFS embed.FS
 
 var Wallpapers = map[string]string{
 	// ansi 16
@@ -58,15 +61,28 @@ func changeWallpaper(color string) error {
 		return fmt.Errorf("\nThe color '%s' is not available 😅", color)
 	}
 
-	// Resolve relative path to absolute path
-	absPath, err := filepath.Abs(imgPath)
+	// Read the image file bytes from the embedded FS
+	data, err := wallpaperFS.ReadFile(imgPath)
 	if err != nil {
-		return fmt.Errorf("\n Failed to get absolute path: %w 🫨", err)
+		return fmt.Errorf("\nFailed to read the embedded wallpaper file: %w 🫨", err)
 	}
 
-	if _, err := os.Stat(absPath); err != nil {
-		return fmt.Errorf("\n File does not exist: %w 🤧", err)
+	// Create a temp file to write the wallpaper image
+	tmpFile, err := os.CreateTemp("", "wallpaper-*.png")
+	if err != nil {
+		return fmt.Errorf("\nFailed to create temp file: %w 🫨", err)
 	}
+	// Closes the open file descriptor associated with tmpFile.
+	// release the file handle and flush any buffered writes.
+	defer tmpFile.Close()
+
+	// Write the embedded image data to the temp file
+	if _, err := tmpFile.Write(data); err != nil {
+		return fmt.Errorf("\nFailed to write data to temp file: %w 🤧", err)
+	}
+
+	// Use the temp file path for the AppleScript command
+	absPath := tmpFile.Name()
 
 	// Prepare an AppleScript command as a string
 	// that tells macOS to set the wallpaper
@@ -76,6 +92,11 @@ func changeWallpaper(color string) error {
 
 	// run AppleScript command using the osascript cli
 	cmd := exec.Command("osascript", "-e", script)
+	if err := cmd.Run(); err != nil {
+		return fmt.Errorf("\nFailed to execute AppleScript: %w 🤧", err)
+	}
 
-	return cmd.Run()
+	// err := cmd.Run()
+
+	return nil
 }

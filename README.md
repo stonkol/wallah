@@ -1,12 +1,10 @@
 <div align="center">
-
 <img src="assets/wall-logo.png" width="50%">
-
-<br>
-
 </div>
 
-wallah-cli is a fast and simple CLI to change your macOS wallpaper and elegantly hide that ugly notch. The minimal alternative to app [Top Notch](https://topnotch.app/). Inspired by [removethenotch](removethenotch.com).
+wallah-cli is a CLI which you can change your macOS wallpaper, in which the menu bar part is black, in order to hide that ugly notch. Furthermore it is less distracting if you have auto-hide the menu bar.
+
+It is a minimal alternative to app [Top Notch](https://topnotch.app/), and it is inspired by [removethenotch](removethenotch.com).
 
 ### Installation
 
@@ -35,9 +33,9 @@ wallah blue
 
 ### 1.1 Build the Binary
 
-Build it (in your project directory run):
+Compile all the go files:
 ```sh
-go build -o wallah # compiles the Go code into an executable named wallah
+go build
 ```
 
 > [!caution] Caution

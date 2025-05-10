@@ -7,7 +7,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var version = "v0.1.15" // default version
+var version = "v0.1.16" // default version
 
 func main() {
 	// custom help template, replace cobra's help
@@ -145,7 +145,7 @@ Flags:
 	// Add flags
 	rootCmd.Flags().BoolP("list", "l", false, "list available colors")
 
-	rootCmd.Flags().BoolP("version", "v", false, "current version")
+	rootCmd.Flags().BoolP("version", "v", false, "current version:")
 
 	// Set custom help template
 	rootCmd.SetHelpTemplate(customHelpTemplate)
