@@ -1,24 +1,27 @@
 <div align="center">
-# wall-cli
+<!--     <h1>wall-cli</h1> -->
+
 <img src="assets/wall-logo.png" width="50%">
+<br>
 </div>
 
-A Wallpaper CLI for removing the top notch and rounding the corners. The minimal alternative to app [Top Notch](https://topnotch.app/). Inspired by [removethenotch](removethenotch.com). A none-resource-consuming, app-free, zero-dependency CLI.
+`wall-cli` is a fast and simple cli to change your macOS wallpaper and elegantly hide that ugly notch  The minimal alternative to app [Top Notch](https://topnotch.app/). Inspired by [removethenotch](removethenotch.com).
 
-You also can adjust your own colors or put your own images on the
-
-A CLI app for changing the color of your wallpaper.
+You also can adjust your own colors or put your own images
+```sh
+wall blue      # set blue (#0000EE)
+```
 
 ## Index
 
-1. [Usage](<README#1. Usage>)
-2. [Colors included](<README#2. Colors included>)
-3. [Having issues?](<README#3. Having issues?>)
-4. [How it works](<README#4. How it works>)
-5. [Roadmap](<README#5. Roadmap>)
-6. [Contributing](<README#6. Contributing>)
+1. [Usage](#1-usage)
+2. [Colors included](#2-colors-included)
+3. [Having issues?](#3-having-issues)
+4. [How it works](#4-how-it-works)
+5. [Roadmap](#5-roadmap)
+6. [Contributing](#6-contributing)
 
-## 1. Usage
+## 1 Usage
 
 ### Build the Binary
 
@@ -49,7 +52,7 @@ wall pikachu   # set pikachu color (#F8A21C)
 1. macOS may requires explicit permission for apps (including Terminal or the compiled CLI binary) to change the wallpaper.
 1. macOS may ask to accept permissions the first time your run the application.
 
-## 2. Colors included
+## 2 Colors included
 
 Example of one of the wallpapers (bright blue):
 
@@ -79,7 +82,7 @@ Based on 8 famous characters, each with their own light and dark mode.
 <img src="assets/char-16.png" width="50%">
 </div>
 
-## 3. Having problems?
+## 3. Having issues
 
 #### Only changed on one deskptop?
 
