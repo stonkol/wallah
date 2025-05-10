@@ -96,43 +96,17 @@ Based on 8 famous characters, each with their own light and dark mode. Add `b-` 
 <img src="assets/char-16.png" width="50%">
 </div>
 
-## 3. Having issues
-
-#### 3.1 Only changed on one deskptop?
-
-On newer macOS versions (Ventura, Sonoma), wallpaper management changed:
-The wallpaper might only change on the current desktop/space.
-You might need to set wallpaper for each desktop separately.
-
-#### 3.2 Running the AppleScript manually
-
-Test the AppleScript works with your wallpaper manually in the Terminal:
-```sh
-osascript -e 'tell application "System Events" to set picture of every desktop to POSIX file "/absolute/path/to/image.jpg"'
-```
-
-#### 3.3 Run the command as the logged-in user
-
-If you run your Go program as root or via sudo, the AppleScript may run as root and fail to change the wallpaper for the logged-in user.
-Make sure you run the CLI as the current logged-in user.
-
-## 4. How it works
-
-- Using `osascript` command to change the color of the wallpaper on macOS.
-- It runs AppleScript from Go using `os/exec` package.
-- All the default wallpapers are located in the `wallpapers` directory.
-- There is a `design-files` directory with the design files (`.psd` and `.afdesign`) used to create the wallpapers. In which you can use to create your own wallpapers, either with solid colors, gradients, or an image.
-
-## 5. Roadmap
+## 3. Roadmap
 
 - The wallah CLI to change wallpapers.
     - [x] --help flag
     - [x] --list flag
+    - [x] have a working binary working alone
     - [ ] Have colored text on the CLI
-    - [ ] Let users change the path of the wallpapers
     - [ ] Let users users set the wallpaper for dark mode and light mode, which will change according to the system settings.
     - [ ] include a `-d` `--dark` and `-l` `--light` flags for toggling mode
     - [ ] Let user enable/disable auto-light/dark mode.
+    - [ ] Let users change the path of the wallpapers
 
 - [x] make a logo to put on the top of the README on Github
 
@@ -145,6 +119,34 @@ Make sure you run the CLI as the current logged-in user.
     - [ ] 16" MBP version.
     - [ ] 13" and 15" MacBook Air
     - [ ] Colors of 8 Characters
+
+## 4. How it works
+
+- Using `osascript` command to change the color of the wallpaper on macOS.
+- It runs AppleScript from Go using `os/exec` package.
+- All the default wallpapers are located in the `wallpapers` directory.
+- There is a `design-files` directory with the design files (`.psd` and `.afdesign`) used to create the wallpapers. In which you can use to create your own wallpapers, either with solid colors, gradients, or an image.
+
+## 5. Having issues
+
+#### 5.1 Only changed on one deskptop?
+
+On newer macOS versions (Ventura, Sonoma), wallpaper management changed:
+The wallpaper might only change on the current desktop/space.
+You might need to set wallpaper for each desktop separately.
+
+#### 5.2 Running the AppleScript manually
+
+Test the AppleScript works with your wallpaper manually in the Terminal:
+```sh
+osascript -e 'tell application "System Events" to set picture of every desktop to POSIX file "/absolute/path/to/image.jpg"'
+```
+
+#### 5.3 Run the command as the logged-in user
+
+If you run your Go program as root or via sudo, the AppleScript may run as root and fail to change the wallpaper for the logged-in user.
+Make sure you run the CLI as the current logged-in user.
+
 
 ## 6. Contributing
 

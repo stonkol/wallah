@@ -7,7 +7,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var version = "v0.1.16" // default version
+var version = "v0.1.16"
 
 func main() {
 	// custom help template, replace cobra's help
@@ -101,7 +101,7 @@ Flags:
 				os.Exit(1)
 			}
 			if versionFlag {
-				fmt.Println("wallah version", version)
+				fmt.Println(version, "🌺")
 				return
 			}
 
