@@ -1,5 +1,5 @@
 <div align="center">
-<img src="assets/wall-logo.png" width="50%">
+<img src="assets/wallah-logo.png" width="50%">
 </div>
 
 wallah-cli is a CLI which you can change your macOS wallpaper, in which the menu bar part is black, in order to hide that ugly notch. Furthermore it is less distracting if you have auto-hide the menu bar.
