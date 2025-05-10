@@ -1,4 +1,4 @@
-module rmv-notch-cli
+module github.com/stonkol/wall-cli
 
 go 1.24.2
 

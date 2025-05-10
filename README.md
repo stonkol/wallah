@@ -7,20 +7,18 @@
 
 </div>
 
-`wall-cli` is a fast and simple cli to change your macOS wallpaper and elegantly hide that ugly notch. The minimal alternative to app [Top Notch](https://topnotch.app/). Inspired by [removethenotch](removethenotch.com).
+`wall-cli` is a fast and simple CLI to change your macOS wallpaper and elegantly hide that ugly notch. The minimal alternative to app [Top Notch](https://topnotch.app/). Inspired by [removethenotch](removethenotch.com).
 
 ### Installation
 
-You need to have Go installed.
-This command will compile and install the CLI tool in your system PATH.
-
+You need to have Go installed. This command will compile and install the CLI tool in your system PATH.
 ```sh
 go install github.com/stonkol/wall-cli@latest
 ```
 
-To check if it is installed:
+If it is installed correctly this will set your wallpaper to blue:
 ```sh
-wall blue      # set wallpaper to blue (#0000EE)
+wall blue
 ```
 
 ## Index
