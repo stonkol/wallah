@@ -9,9 +9,10 @@
 
 `wall-cli` is a fast and simple cli to change your macOS wallpaper and elegantly hide that ugly notch  The minimal alternative to app [Top Notch](https://topnotch.app/). Inspired by [removethenotch](removethenotch.com).
 
-Here is an example, selecting the blue color
+Here is an example, selecting the blue color:
+
 ```sh
-wall blue      # set blue (#0000EE)
+wall blue      # set wallpaper to blue (#0000EE)
 ```
 
 ## Index
@@ -122,7 +123,7 @@ Make sure you run the CLI as the current logged-in user.
     - [ ] include a `-d` `--dark` and `-l` `--light` flags for toggling mode
     - [ ] Let user enable/disable auto-light/dark mode.
 
-- [ ] make a logo to put on the top of the README on Github
+- [x] make a logo to put on the top of the README on Github
 
 - [ ] dark mode script
     - a script to change the color of the wall according to system settings.
