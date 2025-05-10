@@ -87,7 +87,7 @@ Flags:
 			//////////////// INPUT CHECK //////////////
 			// Normal behavior: expect exactly one positional argument (color)
 			if len(args) != 1 {
-				fmt.Println("Error: You must specify exactly one color.")
+				fmt.Println("You must specify exactly one color. 🥲")
 				cmd.Help()
 				os.Exit(1)
 			}
@@ -97,7 +97,7 @@ Flags:
 			// Call the func to change the wallpaper using the provided color
 			err = changeWallpaper(color)
 			if err != nil {
-				fmt.Println("🥲 Error changing wallpaper to:", color, err)
+				fmt.Printf("Error changing to the color '%s' 🥲 %s\n", color, err)
 				os.Exit(1)
 			}
 

@@ -1,19 +1,57 @@
 # wall-cli
 
-Wallpaper maker for removing the top notch and rounding the lower corners.
-
-A none-resource-consuming, app-free, zero-dependency alternative to app [Top Notch](https://topnotch.app/). Inspired by [removethenotch](removethenotch.com)
+A Wallpaper CLI for removing the top notch and rounding the corners. The minimal alternative to app [Top Notch](https://topnotch.app/). Inspired by [removethenotch](removethenotch.com). A none-resource-consuming, app-free, zero-dependency CLI.
 
 You also can adjust your own colors or put your own images on the
 
 A CLI app for changing the color of your wallpaper.
 
-## The colors
+## Index
+
+1. [Usage](<README#1. Usage>)
+2. [Colors included](<README#2. Colors included>)
+3. [Having issues?](<README#3. Having issues?>)
+4. [How it works](<README#4. How it works>)
+5. [Roadmap](<README#5. Roadmap>)
+6. [Contributing](<README#6. Contributing>)
+
+## 1. Usage
+
+### Build the Binary
+
+Build it (in your project directory run):
+```sh
+go build -o wall # compiles the Go code into an executable named wall
+```
+
+### Move the Binary
+
+Move the binary to a directory in your PATH, to run the app globally:
+```sh
+sudo mv wall /usr/local/bin/
+sudo chmod +x /usr/local/bin/wall # make the file executable
+```
+
+### Try it out
+
+```sh
+wall -v        # show version
+wall -h        # show help
+wall -l        # show list of colors available
+wall blue      # set blue (#0000EE)
+wall blue-b    # set bright blue (#5C5CFF)
+wall pikachu   # set pikachu color (#F8A21C)
+```
+
+1. macOS may requires explicit permission for apps (including Terminal or the compiled CLI binary) to change the wallpaper.
+1. macOS may ask to accept permissions the first time your run the application.
+
+## 2. Colors included
 
 Example of one of the wallpapers (bright blue):
 
 <div align="center">
-<img src="wallpapers/mbp-14/blue-b.png" width="70%">
+<img src="wallpapers/mbp-14/blue-b.png" width="50%">
 </div>
 
 ### ANSI 16
@@ -25,7 +63,7 @@ If you want their bright versions add an "b-":
 `b-black`, `b-red`, `b-green`, `b-yellow`, `b-blue`, `b-magenta`, `b-cyan`, `b-white`.
 
 <div align="center">
-<img src="wallpapers/ansi-16.png" width="70%">
+<img src="wallpapers/ansi-16.png" width="50%">
 </div>
 
 ### CHAR 16
@@ -35,21 +73,10 @@ Based on 8 famous characters, each with their own light and dark mode.
 `pikachu`, `charmander`, `stitchy`, `yoshi`, `blender`, `kirby`, `teddy`, `wario`.
 
 <div align="center">
-<img src="wallpapers/char-16.png" width="70%">
+<img src="wallpapers/char-16.png" width="50%">
 </div>
 
-### Usage
-
-```sh
-wall blue      # set blue (#0000EE)
-wall b-blue   # set bright blue (#5C5CFF)
-```
-
-1. macOS requires explicit permission for apps (including Terminal or the compiled CLI binary) to change the wallpaper
-
-1. macOS may ask to accept permissions the first time your run the application.
-
-### Having problems
+## 3. Having problems?
 
 #### Only changed on one deskptop?
 
@@ -69,40 +96,25 @@ osascript -e 'tell application "System Events" to set picture of every desktop t
 If you run your Go program as root or via sudo, the AppleScript may run as root and fail to change the wallpaper for the logged-in user.
 Make sure you run the CLI as the current logged-in user.
 
-### How it works
+## 4. How it works
 
 - Using `osascript` command to change the color of the wallpaper on macOS.
 - It runs AppleScript from Go using `os/exec` package.
+- All the default wallpapers are located in the `wallpapers` directory.
+- There is a `design-files` directory with the design files (`.psd` and `.afdesign`) used to create the wallpapers. In which you can use to create your own wallpapers, either with solid colors, gradients, or an image.
 
-### Build and Run
-
-Build it (in your project directory run):
-```sh
-go build -o wall # compiles the Go code into an executable named wall
-```
-
-Run the cli and input a `color`:
-```sh
-./wall blue     # set blue (#0000EE)
-./wall b-blue   # set bright blue (#5C5CFF)
-```
-
-If you get a permission error on macOS or Linux, make the file executable:
-```sh
-chmod +x ./wall
-```
-
-To run the app globally, you can move the built executable to a directory in your PATH, like `/usr/local/bin`.
-
-## TODO
+## 5. Roadmap
 
 - The wall CLI to change wallpapers.
-    - [x] Improve flags
+    - [x] --help flag
+    - [x] --list flag
     - [ ] Have colored text on the CLI
     - [ ] Let users change the path of the wallpapers
     - [ ] Let users users set the wallpaper for dark mode and light mode, which will change according to the system settings.
     - [ ] include a `-d` `--dark` and `-l` `--light` flags for toggling mode
     - [ ] Let user enable/disable auto-light/dark mode.
+
+- [ ] make a logo to put on the top of the README on Github
 
 - [ ] dark mode script
     - a script to change the color of the wall according to system settings.
@@ -114,4 +126,6 @@ To run the app globally, you can move the built executable to a directory in you
     - [ ] 13" and 15" MacBook Air
     - [ ] Colors of 8 Characters
 
-## Acknowledgements
+## 6. Contributing
+
+Welcome to make a pull request or add an issue, but before please read the README.md before contributing. 😀

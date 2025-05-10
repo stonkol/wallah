@@ -40,22 +40,17 @@ func changeWallpaper(color string) error {
 
 	// Check if the color exists in the map
 	if !ok {
-		return fmt.Errorf("Emmm? 😅 The color '%s' is not available", color)
+		return fmt.Errorf("\nThe color '%s' is not available 😅", color)
 	}
 
 	// Resolve relative path to absolute path
 	absPath, err := filepath.Abs(imgPath)
 	if err != nil {
-		return fmt.Errorf("failed to get absolute path: %w", err)
+		return fmt.Errorf("\n Failed to get absolute path: %w 🫨", err)
 	}
 
 	if _, err := os.Stat(absPath); err != nil {
-		return fmt.Errorf("file does not exist: %w", err)
-	}
-
-	// Check if file exists
-	if _, err := os.Stat(absPath); err != nil {
-		return fmt.Errorf("file does not exist: %w", err)
+		return fmt.Errorf("\n File does not exist: %w 🤧", err)
 	}
 
 	// Prepare an AppleScript command as a string
