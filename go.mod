@@ -6,6 +6,7 @@ require (
 	github.com/charmbracelet/lipgloss v1.1.0
 	github.com/gookit/color v1.5.4
 	github.com/spf13/cobra v1.9.1
+	golang.org/x/term v0.32.0
 )
 
 require (

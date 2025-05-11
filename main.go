@@ -17,20 +17,20 @@ var colorStyles = map[string][2]string{
 	// ansi 16
 	"black":     {"#fff", "#000000"},
 	"blue":      {"#fff", "#0000ff"},
-	"cyan":      {"#000", "#00ffff"},
+	"cyan":      {"#000", "#00cdcd"},
 	"green":     {"#fff", "#00dd00"},
-	"magenta":   {"#fff", "#ff00ff"},
-	"red":       {"#fff", "#ff0000"},
-	"yellow":    {"#000", "#ffff00"},
+	"magenta":   {"#fff", "#cd00cd"},
+	"red":       {"#fff", "#cd0000"},
+	"yellow":    {"#000", "#cdcd00"},
 	"white":     {"#000", "#ffffff"},
 	"black-b":   {"#fff", "#7f7f7f"},
-	"blue-b":    {"#fff", "#00007f"},
-	"cyan-b":    {"#000", "#007f7f"},
+	"blue-b":    {"#fff", "#5c5cff"},
+	"cyan-b":    {"#000", "#00ffff"},
 	"green-b":   {"#000", "#00ff00"},
-	"magenta-b": {"#fff", "#7f007f"},
-	"red-b":     {"#fff", "#7f0000"},
-	"yellow-b":  {"#000", "#7f7f00"},
-	"white-b":   {"#000", "#c0c0c0"},
+	"magenta-b": {"#fff", "#ff00ff"},
+	"red-b":     {"#fff", "#ff0000"},
+	"yellow-b":  {"#000", "#ffff00"},
+	"white-b":   {"#000", "#e5e5e5"},
 
 	// bonus
 	"orange":   {"#000", "#ff5516"},
@@ -70,12 +70,9 @@ func printColoredLabel(colorName string) {
 		Bold(true).
 		Background(bg).
 		Foreground(fg).
-		// add width, margin, etc
-		// PaddingLeft(6).
-		// PaddingRight(6).
 		PaddingTop(2).
 		PaddingBottom(2).
-		Width(25).
+		Width(27).
 		Align(lipgloss.Center).
 		Render(colorName)
 
@@ -85,7 +82,6 @@ func printColoredLabel(colorName string) {
 }
 
 func main() {
-
 	// custom help template, replace cobra's help
 	const customHelpTemplate = `{{with (or .Long .Short)}}{{. | trimTrailingWhitespaces}}
 
@@ -137,32 +133,35 @@ Flags:
 			var wallpaperOrder = []string{
 				"black",
 				"blue",
-				"cyan",
-				"green",
-				"magenta",
 				"red",
-				"white",
+				"green",
 				"black-b",
 				"blue-b",
-				"cyan-b",
-				"green-b",
-				"magenta-b",
 				"red-b",
+				"green-b",
+
+				"yellow",
+				"cyan",
+				"magenta",
+				"white",
+				"yellow-b",
+				"cyan-b",
+				"magenta-b",
 				"white-b",
 
 				"akira",
 				"blender",
 				"grimace",
 				"kirby",
-				"pikachu",
-				"stitchy",
-				"teddy",
-				"yoshi",
-
 				"akira-b",
 				"blender-b",
 				"grimace-b",
 				"kirby-b",
+
+				"pikachu",
+				"stitchy",
+				"teddy",
+				"yoshi",
 				"pikachu-b",
 				"stitchy-b",
 				"teddy-b",
@@ -188,10 +187,7 @@ Flags:
 				return
 			}
 			if listFlag {
-				// Iterate over the slice to print colors in order
-				for _, colorName := range wallpaperOrder {
-					fmt.Println(" -", colorName)
-				}
+				printColorsInColumns(wallpaperOrder, colorStyles)
 				return
 			}
 
