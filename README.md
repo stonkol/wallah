@@ -1,9 +1,10 @@
+<div align="center">
+
 ![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/stonkol/wallah?sort=semver)
 ![Go Version](https://img.shields.io/github/go-mod/go-version/stonkol/wall-cli)
 ![Build Status](https://github.com/stonkol/wallah/actions/workflows/go.yml/badge.svg)
 [![Go Report Card](https://goreportcard.com/badge/github.com/stonkol/wall-cli)](https://goreportcard.com/report/github.com/stonkol/wall-cli)
 
-<div align="center">
 <img src="assets/wallah-logo.png" width="50%">
 </div>
 
