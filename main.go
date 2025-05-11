@@ -70,7 +70,7 @@ Flags:
 			}
 
 			if versionFlag {
-				fmt.Println("version", version, "🌺")
+				fmt.Println("version", version, "🫁")
 				return
 			}
 
