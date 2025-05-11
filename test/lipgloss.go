@@ -6,7 +6,7 @@ import (
 	"github.com/charmbracelet/lipgloss"
 )
 
-func testLipGloss() {
+func main() {
 	// lipgloss.Color("5")       // magenta
 	// lipgloss.Color("201")     // hot pink
 	// lipgloss.Color("#04B575") // a green
@@ -38,8 +38,6 @@ func testLipGloss() {
 		PaddingLeft(4).
 		Width(22)
 	fmt.Println(hello.Render("Hello, kitty"))
-
-	fmt.Println("\n")
 
 	var colorName = lipgloss.NewStyle().
 		Bold(true).
