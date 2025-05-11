@@ -41,7 +41,7 @@ var Wallpapers = map[string]string{
 	"pikachu": "wallpapers/mbp-14/pikachu.png",
 	"stitchy": "wallpapers/mbp-14/stitchy.png",
 	"teddy":   "wallpapers/mbp-14/teddy.png",
-	"wario":   "wallpapers/mbp-14/wario.png",
+	"grimace": "wallpapers/mbp-14/grimace.png",
 	"yoshi":   "wallpapers/mbp-14/yoshi.png",
 
 	"akira-b":   "wallpapers/mbp-14/akira-b.png",
@@ -50,7 +50,7 @@ var Wallpapers = map[string]string{
 	"pikachu-b": "wallpapers/mbp-14/pikachu-b.png",
 	"stitchy-b": "wallpapers/mbp-14/stitchy-b.png",
 	"teddy-b":   "wallpapers/mbp-14/teddy-b.png",
-	"wario-b":   "wallpapers/mbp-14/wario-b.png",
+	"grimace-b": "wallpapers/mbp-14/grimace-b.png",
 	"yoshi-b":   "wallpapers/mbp-14/yoshi-b.png",
 }
 

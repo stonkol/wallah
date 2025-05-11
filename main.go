@@ -4,69 +4,84 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/gookit/color"
+	"github.com/charmbracelet/lipgloss"
 	"github.com/spf13/cobra"
 )
 
-var version = "0.2.0"
+var version = "0.2.1"
 
 var colorStyles = map[string][2]string{
 
 	// lowercase for hex recommended for compatibility
+	// 0 is black, f is white
 	// ansi 16
-	"black":     {"#ffffff", "#000000"},
-	"blue":      {"#ffffff", "#0000ff"},
-	"cyan":      {"#000000", "#00ffff"},
-	"green":     {"#000000", "#00ff00"},
-	"magenta":   {"#ffffff", "#ff00ff"},
-	"red":       {"#ffffff", "#ff0000"},
-	"yellow":    {"#000000", "#ffff00"},
-	"white":     {"#000000", "#ffffff"},
-	"black-b":   {"#ffffff", "#7f7f7f"},
-	"blue-b":    {"#ffffff", "#00007f"},
-	"cyan-b":    {"#000000", "#007f7f"},
-	"green-b":   {"#000000", "#007f00"},
-	"magenta-b": {"#ffffff", "#7f007f"},
-	"red-b":     {"#ffffff", "#7f0000"},
-	"yellow-b":  {"#000000", "#7f7f00"},
-	"white-b":   {"#000000", "#c0c0c0"},
+	"black":     {"#fff", "#000000"},
+	"blue":      {"#fff", "#0000ff"},
+	"cyan":      {"#000", "#00ffff"},
+	"green":     {"#fff", "#00dd00"},
+	"magenta":   {"#fff", "#ff00ff"},
+	"red":       {"#fff", "#ff0000"},
+	"yellow":    {"#000", "#ffff00"},
+	"white":     {"#000", "#ffffff"},
+	"black-b":   {"#fff", "#7f7f7f"},
+	"blue-b":    {"#fff", "#00007f"},
+	"cyan-b":    {"#000", "#007f7f"},
+	"green-b":   {"#000", "#00ff00"},
+	"magenta-b": {"#fff", "#7f007f"},
+	"red-b":     {"#fff", "#7f0000"},
+	"yellow-b":  {"#000", "#7f7f00"},
+	"white-b":   {"#000", "#c0c0c0"},
 
 	// bonus
-	"orange":   {"#000000", "#ff5516"},
-	"orange-b": {"#000000", "#ff7e23"},
+	"orange":   {"#000", "#ff5516"},
+	"orange-b": {"#000", "#ff7e23"},
 
 	// char 16
-	"akira":     {"#000000", "#ab2f1a"},
-	"blender":   {"#000000", "#a2bcd0"},
-	"grimace":   {"#000000", "#6a1c63"},
-	"kirby":     {"#000000", "#fc5c8e"},
-	"pikachu":   {"#000000", "#f8a21c"},
-	"stitchy":   {"#000000", "#527bac"},
-	"teddy":     {"#000000", "#925923"},
-	"yoshi":     {"#000000", "#43a934"},
-	"akira-b":   {"#ffffff", "#df2626"},
-	"blender-b": {"#ffffff", "#c2d6e2"},
-	"grimace-b": {"#ffffff", "#8e1e8c"},
-	"kirby-b":   {"#ffffff", "#f49792"},
-	"pikachu-b": {"#ffffff", "#f4db06"},
-	"stitchy-b": {"#ffffff", "#69b8dc"},
-	"teddy-b":   {"#ffffff", "#d09249"},
-	"yoshi-b":   {"#ffffff", "#69c12b"},
+	"akira":     {"#fff", "#ab2f1a"},
+	"blender":   {"#fff", "#a2bcd0"},
+	"grimace":   {"#fff", "#6a1c63"},
+	"kirby":     {"#fff", "#fc5c8e"},
+	"pikachu":   {"#fff", "#f8a21c"},
+	"stitchy":   {"#fff", "#527bac"},
+	"teddy":     {"#fff", "#925923"},
+	"yoshi":     {"#fff", "#43a934"},
+	"akira-b":   {"#fff", "#df2626"},
+	"blender-b": {"#000", "#c2d6e2"},
+	"grimace-b": {"#fff", "#8e1e8c"},
+	"kirby-b":   {"#fff", "#f49792"},
+	"pikachu-b": {"#000", "#f4db06"},
+	"stitchy-b": {"#fff", "#69b8dc"},
+	"teddy-b":   {"#fff", "#d09249"},
+	"yoshi-b":   {"#fff", "#69c12b"},
 }
 
 func printColoredLabel(colorName string) {
-	style, ok := colorStyles[colorName]
+	colors, ok := colorStyles[colorName]
 	if !ok {
 		// fallback: print plain text if color not found
 		fmt.Printf("Your wallah is %s 🤟\n", colorName)
 		return
 	}
 
-	// Compose the output line with inline tags
-	// Only the colorName word is styled with fg/bg and padded spaces
-	// <fg=white;bg=red> colored text </>
-	output := "Your wallah is <fg=" + style.Fg + ";bg=" + style.Bg + "> " + colorName + " </> 🤟"
-	fmt.Println(color.Render(output))
+	fg := lipgloss.Color(colors[0])
+	bg := lipgloss.Color(colors[1])
+
+	style := lipgloss.NewStyle().
+		Bold(true).
+		Background(bg).
+		Foreground(fg).
+		// add width, margin, etc
+		// PaddingLeft(6).
+		// PaddingRight(6).
+		PaddingTop(2).
+		PaddingBottom(2).
+		Width(25).
+		Align(lipgloss.Center).
+		Render(colorName)
+
+	// ⬇️🔽
+	fmt.Printf("\n      Your wallah is\n")
+	fmt.Printf("%s\n\n", style)
 }
 
 func main() {
@@ -198,9 +213,6 @@ Flags:
 			}
 
 			// If successful, print
-			// fmt.Println("  Your wallah is now", color, "🤟")
-			// fmt.Print("Your wallah is ")
-			// printColoredLabel("red-b")
 			printColoredLabel(colorName)
 		},
 	}
