@@ -99,22 +99,31 @@ Based on 8 famous characters, each with their own light and dark mode. Add `b-` 
 
 ## 3. Roadmap
 
-- The wallah CLI to change wallpapers.
-    - [x] --help flag
-    - [x] --list flag
-    - [x] have a working binary working alone
-    - [x] Colors of 8 characters
-    - [ ] Have colored text on the CLI
-    - [ ] Let users set the wallpaper for dark mode and light mode, which will change according to the system settings.
-    - [ ] Include a `-d` `--dark` and `-l` `--light` flags for toggling mode
-    - [ ] Let user enable/disable auto-light/dark mode.
-    - [ ] Let users change the path of the wallpapers
+### General
 
+- [x] --help flag
+- [x] --list flag
+- [x] have a working binary working alone
 - [x] Make a logo to put on the top of the README on GitHub
+- [ ] set random color for the wallah `r` `--random`
+- [ ] change to previous color wallah `r` `--random`
 
-- [ ] Dark mode script
-    - A script to change the color of the wall according to system settings.
-    - Let the user setting if
+### Styling the cli
+
+- [x] Colors of 8 characters
+- [x] Have colored text on the CLI
+- [x] have multiple columns to show the list
+- [x] have a styled list
+
+### Light / Dark mode
+
+- [x] Let users set the wallpaper for dark mode and light mode, which will change according to the system settings.
+- [ ] Include a `-d` `--dark` and `-l` `--light` flags for toggling mode
+- [ ] Let user enable/disable auto-light/dark mode.
+- [ ] Let users change the path of the wallpapers
+
+- [ ] A script to change the color of the wall according to system settings.
+- [ ] Let the user setting if
 
 ### Add more wallpapers
 
@@ -131,6 +140,8 @@ Based on 8 famous characters, each with their own light and dark mode. Add `b-` 
     - [ ] Adaptive Colors (specify color options for light and dark mode)
     - [ ] Gradient support
     - [ ] Adaptive Gradient support
+
+- [ ] Have animations when changing the wallpaper
 
 ## 4. How it works
 
