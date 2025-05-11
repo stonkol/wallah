@@ -10,47 +10,48 @@ import (
 
 var version = "0.2.0"
 
-var colorStyles = map[string]struct{ Fg, Bg string }{
+var colorStyles = map[string][2]string{
 
+	// lowercase for hex recommended for compatibility
 	// ansi 16
-	"black":     {"#FFFFFF", "#000000"},
-	"blue":      {"#FFFFFF", "#0000FF"},
-	"cyan":      {"#000000", "#00FFFF"},
-	"green":     {"#000000", "#00FF00"},
-	"magenta":   {"#FFFFFF", "#FF00FF"},
-	"red":       {"#FFFFFF", "#FF0000"},
-	"yellow":    {"#000000", "#FFFF00"},
-	"white":     {"#000000", "#FFFFFF"},
-	"black-b":   {"#FFFFFF", "#7F7F7F"},
-	"blue-b":    {"#FFFFFF", "#00007F"},
-	"cyan-b":    {"#000000", "#007F7F"},
-	"green-b":   {"#000000", "#007F00"},
-	"magenta-b": {"#FFFFFF", "#7F007F"},
-	"red-b":     {"#FFFFFF", "#7F0000"},
-	"yellow-b":  {"#000000", "#7F7F00"},
-	"white-b":   {"#000000", "#C0C0C0"},
+	"black":     {"#ffffff", "#000000"},
+	"blue":      {"#ffffff", "#0000ff"},
+	"cyan":      {"#000000", "#00ffff"},
+	"green":     {"#000000", "#00ff00"},
+	"magenta":   {"#ffffff", "#ff00ff"},
+	"red":       {"#ffffff", "#ff0000"},
+	"yellow":    {"#000000", "#ffff00"},
+	"white":     {"#000000", "#ffffff"},
+	"black-b":   {"#ffffff", "#7f7f7f"},
+	"blue-b":    {"#ffffff", "#00007f"},
+	"cyan-b":    {"#000000", "#007f7f"},
+	"green-b":   {"#000000", "#007f00"},
+	"magenta-b": {"#ffffff", "#7f007f"},
+	"red-b":     {"#ffffff", "#7f0000"},
+	"yellow-b":  {"#000000", "#7f7f00"},
+	"white-b":   {"#000000", "#c0c0c0"},
 
 	// bonus
-	"orange":   {"#000000", "#FF5516"},
-	"orange-b": {"#000000", "#FF7E23"},
+	"orange":   {"#000000", "#ff5516"},
+	"orange-b": {"#000000", "#ff7e23"},
 
 	// char 16
-	"akira":     {"#000000", "#AB2F1A"},
-	"blender":   {"#000000", "#A2BCD0"},
-	"grimace":   {"#000000", "#6A1C63"},
-	"kirby":     {"#000000", "#FC5C8E"},
-	"pikachu":   {"#000000", "#F8A21C"},
-	"stitchy":   {"#000000", "#527BAC"},
+	"akira":     {"#000000", "#ab2f1a"},
+	"blender":   {"#000000", "#a2bcd0"},
+	"grimace":   {"#000000", "#6a1c63"},
+	"kirby":     {"#000000", "#fc5c8e"},
+	"pikachu":   {"#000000", "#f8a21c"},
+	"stitchy":   {"#000000", "#527bac"},
 	"teddy":     {"#000000", "#925923"},
-	"yoshi":     {"#000000", "#43A934"},
-	"akira-b":   {"#ffffff", "#DF2626"},
-	"blender-b": {"#ffffff", "#C2D6E2"},
-	"grimace-b": {"#ffffff", "#8E1E8C"},
-	"kirby-b":   {"#ffffff", "#F49792"},
-	"pikachu-b": {"#ffffff", "#F4DB06"},
-	"stitchy-b": {"#ffffff", "#69B8DC"},
-	"teddy-b":   {"#ffffff", "#D09249"},
-	"yoshi-b":   {"#ffffff", "#69C12B"},
+	"yoshi":     {"#000000", "#43a934"},
+	"akira-b":   {"#ffffff", "#df2626"},
+	"blender-b": {"#ffffff", "#c2d6e2"},
+	"grimace-b": {"#ffffff", "#8e1e8c"},
+	"kirby-b":   {"#ffffff", "#f49792"},
+	"pikachu-b": {"#ffffff", "#f4db06"},
+	"stitchy-b": {"#ffffff", "#69b8dc"},
+	"teddy-b":   {"#ffffff", "#d09249"},
+	"yoshi-b":   {"#ffffff", "#69c12b"},
 }
 
 func printColoredLabel(colorName string) {
@@ -63,8 +64,9 @@ func printColoredLabel(colorName string) {
 
 	// Compose the output line with inline tags
 	// Only the colorName word is styled with fg/bg and padded spaces
+	// <fg=white;bg=red> colored text </>
 	output := "Your wallah is <fg=" + style.Fg + ";bg=" + style.Bg + "> " + colorName + " </> 🤟"
-	color.Println(output)
+	fmt.Println(color.Render(output))
 }
 
 func main() {

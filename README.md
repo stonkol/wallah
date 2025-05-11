@@ -102,23 +102,34 @@ Based on 8 famous characters, each with their own light and dark mode. Add `b-` 
     - [x] --help flag
     - [x] --list flag
     - [x] have a working binary working alone
+    - [x] Colors of 8 characters
     - [ ] Have colored text on the CLI
     - [ ] Let users set the wallpaper for dark mode and light mode, which will change according to the system settings.
-    - [ ] include a `-d` `--dark` and `-l` `--light` flags for toggling mode
+    - [ ] Include a `-d` `--dark` and `-l` `--light` flags for toggling mode
     - [ ] Let user enable/disable auto-light/dark mode.
     - [ ] Let users change the path of the wallpapers
 
-- [x] make a logo to put on the top of the README on GitHub
+- [x] Make a logo to put on the top of the README on GitHub
 
-- [ ] dark mode script
+- [ ] Dark mode script
     - A script to change the color of the wall according to system settings.
     - Let the user setting if
 
-- Add other versions
-    - [ ] Include the 16 [ANSI colors](https://en.wikipedia.org/wiki/List_of_software_palettes)
-    - [ ] 16" MBP version.
-    - [ ] 13" and 15" MacBook Air
-    - [ ] Colors of 8 characters
+### Add more wallpapers
+
+- [x] Include the 16 [ANSI colors](https://en.wikipedia.org/wiki/List_of_software_palettes)
+- [ ] 16" MacBook Pro version.
+- [ ] 13" and 15" MacBook Air
+
+### Future big features
+
+- Dynamic wallpaper creator based on users input color
+    - [ ] ANSI 16 support
+    - [ ] ANSI 256 support
+    - [ ] True Color (HEX) support
+    - [ ] Adaptive Colors (specify color options for light and dark mode)
+    - [ ] Gradient support
+    - [ ] Adaptive Gradient support
 
 ## 4. How it works
 
@@ -138,6 +149,7 @@ You might need to set wallpaper for each desktop separately.
 #### 5.2 Running the AppleScript manually
 
 Test the AppleScript works with your wallpaper manually in the Terminal:
+
 ```sh
 osascript -e 'tell application "System Events" to set picture of every desktop to POSIX file "/absolute/path/to/image.jpg"'
 ```
