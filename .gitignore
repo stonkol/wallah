@@ -20,7 +20,7 @@
 
 # Binaries
 /bin/
-/your-cli-name  # Replace with your executable name
+/wallah
 
 # Go workspace files
 /go.work

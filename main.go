@@ -1,4 +1,4 @@
-// the flags logic and cobra usage are located here
+// the flag's logic (cobra) are located here
 
 package main
 
