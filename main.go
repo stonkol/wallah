@@ -1,13 +1,16 @@
+// the flags logic and cobra usage are located here
+
 package main
 
 import (
 	"fmt"
 	"os"
 
+	"github.com/charmbracelet/lipgloss"
 	"github.com/spf13/cobra"
 )
 
-var version = "0.2.3"
+var version = "0.2.4 🍡"
 
 func main() {
 	// custom help template, replace cobra's help
@@ -24,7 +27,7 @@ Flags:
 	var rootCmd = &cobra.Command{
 		// users will type `wall` on the Command Line
 		Use:   "wallah",
-		Short: "A fast and simple CLI to change your macOS wallpaper and elegantly hide that ugly notch 🌀", // A short description
+		Short: "A fast and simple CLI to change your macOS wallpaper and elegantly hide that ugly notch.", // A short description
 
 		Long: "\nHi I'm Wallah, I will help you to change your wallpaper to your desire color and get ride of that notch.\n\nWith wallah you can easily apply wallpapers featuring solid colors and rounded borders that blend seamlessly around the notch area.\n\nExample:\n  wallah [color]\n",
 
@@ -70,7 +73,11 @@ Flags:
 			}
 
 			if versionFlag {
-				fmt.Println("version", version, "🫁")
+				versionStyle := lipgloss.NewStyle().
+					Foreground(lipgloss.Color("#ff7e23")) //orange
+
+				versionLine := "version" + version
+				fmt.Println(versionStyle.Render(versionLine))
 				return
 			}
 

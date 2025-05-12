@@ -1,3 +1,5 @@
+// This file contains the function to showcase the list of colors available in a colored and organized way, by using the -l or --list flags
+
 package main
 
 import (

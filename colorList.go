@@ -1,4 +1,8 @@
-// print.go
+// This file contains two lists:
+//
+// 1. The colors available and their mapped styles (fg and bg).
+// 2. The colors available the location for each of them.
+
 package main
 
 var colorStyles = map[string][2]string{

@@ -1,3 +1,5 @@
+// This file contains the logic for printing the wallah, which is a preview of the color of the wallpaper in a more graphic way
+
 package main
 
 import (
@@ -16,25 +18,36 @@ func printWall(colorName string) {
 
 	fg := lipgloss.Color(colors[0])
 	bg := lipgloss.Color(colors[1])
+	black := lipgloss.Color("#000")
 
-	wallTop := lipgloss.NewStyle().
-		Background(fg).
+	wallahTopText := lipgloss.NewStyle().
 		Foreground(bg).
-		// MarginLeft(6).
-		Width(37).
+		MarginLeft(6).
+		Width(31).
 		Align(lipgloss.Center).
-		Render("Your wallah is")
+		Render("your wallah is")
 
-	wall := lipgloss.NewStyle().
+	// holes := []rune{'○', '。', '●', '◯', '◎', '◉', '◌', '⚫', '⚪', '🕳'}
+	wallahMenuBar := lipgloss.NewStyle().
+		Background(black).
+		Foreground(bg).
+		MarginLeft(6).
+		Width(31).
+		Align(lipgloss.Center).
+		Render("●")
+
+	// print a preview of the color of the wallpaper
+	wallah := lipgloss.NewStyle().
 		Bold(true).
 		Background(bg).
 		Foreground(fg).
-		PaddingTop(2).
-		PaddingBottom(2).
+		PaddingTop(3).
+		PaddingBottom(3).
 		MarginLeft(6).
-		Width(25).
+		Width(31).
 		Align(lipgloss.Center).
 		Render(colorName)
 
-	fmt.Printf("\n%s\n\n%s\n\n", wallTop, wall)
+	fmt.Printf("\n%s\n%s", wallahTopText, wallahMenuBar)
+	fmt.Printf("\n%s\n\n\n", wallah)
 }

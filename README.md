@@ -105,6 +105,7 @@ Based on 8 famous characters, each with their own light and dark mode. Add `b-` 
 - [x] --list flag
 - [x] have a working binary working alone
 - [x] Make a logo to put on the top of the README on GitHub
+- [ ] have a gif of using wallah using a tape of [vhs](https://github.com/charmbracelet/vhs) in readme.
 - [ ] set random color for the wallah `r` `--random`
 - [ ] change to previous color wallah `r` `--random`
 

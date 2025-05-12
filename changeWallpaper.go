@@ -1,3 +1,5 @@
+// This file contains the function to change the wallpaper from a embedded image located in the binaries. It run an AppleScript command using the osascript cli to set the wallpaper.
+
 package main
 
 import (
@@ -55,8 +57,6 @@ func changeWallpaper(colorName string) error {
 	if err := cmd.Run(); err != nil {
 		return fmt.Errorf("\nFailed to execute AppleScript: %w 🤧", err)
 	}
-
-	// err := cmd.Run()
 
 	return nil
 }
