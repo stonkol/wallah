@@ -4,13 +4,15 @@ package main
 
 import (
 	"fmt"
+	"math/rand"
 	"os"
+	"time"
 
 	"github.com/charmbracelet/lipgloss"
 	"github.com/spf13/cobra"
 )
 
-var version = "0.2.4 🍡"
+var version = "0.2.5 🍭"
 
 func main() {
 	// custom help template, replace cobra's help
@@ -29,7 +31,7 @@ Flags:
 		Use:   "wallah",
 		Short: "A fast and simple CLI to change your macOS wallpaper and elegantly hide that ugly notch.", // A short description
 
-		Long: "\nHi I'm Wallah, I will help you to change your wallpaper to your desire color and get ride of that notch.\n\nWith wallah you can easily apply wallpapers featuring solid colors and rounded borders that blend seamlessly around the notch area.\n\nExample:\n  wallah [color]\n",
+		Long: "\nHi I'm Wallah, I will help you to change your wallpaper to your desire color and get ride of that notch.\n\nWith wallah you can easily apply wallpapers featuring solid colors and rounded borders that blend seamlessly around the notch area.\n\nExample:\n  wallah [color]\t Set a wallpaper color\n  wallah random\t Randomly sets a wallpaper",
 
 		// validation only in args
 		Args: func(cmd *cobra.Command, args []string) error {
@@ -41,17 +43,29 @@ Flags:
 			if err != nil {
 				return err
 			}
+			randomFlag, err := cmd.Flags().GetBool("random")
+			if err != nil {
+				return err
+			}
 
-			if listFlag || versionFlag {
+			if listFlag || versionFlag || randomFlag {
 				if len(args) != 0 {
-					printErrorMessage("No arguments allowed when using --list or --version.")
+					printErrorMessage("No arguments allowed when using a flag.")
+					return fmt.Errorf("no arguments allowed when using a flag.")
 				}
 				return nil
 			}
 
 			if len(args) != 1 {
-				printErrorMessage("Requires exactly one argument.")
+				printErrorMessage("Requires exactly one argument")
+				return fmt.Errorf("requires exactly one argument")
 			}
+
+			// Allow "random" as a positional argument
+			if args[0] == "random" {
+				return nil
+			}
+
 			return nil
 		},
 
@@ -63,7 +77,6 @@ Flags:
 			if err != nil {
 				printErrorMessage("problem for reading flags:")
 				printErr(err)
-				// printTwoErrorMessages(, err)
 				os.Exit(1)
 			}
 
@@ -72,7 +85,14 @@ Flags:
 			if err != nil {
 				printErrorMessage("problem for reading flags:")
 				printErr(err)
-				// printTwoErrorMessages(, err)
+				os.Exit(1)
+			}
+
+			// Check if --random flag is set
+			randomFlag, err := cmd.Flags().GetBool("random")
+			if err != nil {
+				printErrorMessage("problem for reading flags:")
+				printErr(err)
 				os.Exit(1)
 			}
 
@@ -87,6 +107,22 @@ Flags:
 
 			if listFlag {
 				printList()
+				return
+			}
+
+			if randomFlag || (len(args) > 0 && args[0] == "random") {
+				rand.Seed(time.Now().UnixNano())
+				randomColor := wallpaperOrder[rand.Intn(len(wallpaperOrder))]
+
+				err := changeWallpaper(randomColor)
+				if err != nil {
+					fullMessage := fmt.Sprintf("Error changing the wallah to '%s'.", randomColor)
+					printErrorMessage(fullMessage)
+					printErr(err)
+					os.Exit(1)
+				}
+
+				printWall(randomColor)
 				return
 			}
 
@@ -118,6 +154,8 @@ Flags:
 	rootCmd.Flags().BoolP("list", "l", false, "list available colors")
 
 	rootCmd.Flags().BoolP("version", "v", false, "current version")
+
+	rootCmd.Flags().BoolP("random", "r", false, "set a random wallpaper color")
 
 	// Set custom help template
 	rootCmd.SetHelpTemplate(customHelpTemplate)

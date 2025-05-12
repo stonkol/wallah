@@ -1,9 +1,26 @@
 // This file contains two lists:
 //
+// 1. Ordered list of the colors
 // 1. The colors available and their mapped styles (fg and bg).
 // 2. The colors available the location for each of them.
 
 package main
+
+// a slice of the colors in order,
+// instead of output the map itself (which is random)
+var wallpaperOrder = []string{
+	"black", "yellow", "blue", "red",
+	"black-b", "yellow-b", "blue-b", "red-b",
+
+	"white", "green", "magenta", "cyan",
+	"white-b", "green-b", "magenta-b", "cyan-b",
+
+	"akira", "blender", "yoshi", "grimace",
+	"akira-b", "blender-b", "yoshi-b", "grimace-b",
+
+	"pikachu", "stitchy", "kirby", "teddy",
+	"pikachu-b", "stitchy-b", "kirby-b", "teddy-b",
+}
 
 var colorStyles = map[string][2]string{
 

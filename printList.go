@@ -18,22 +18,6 @@ func printList() {
 	if err != nil {
 		width = 50 // fallback width
 	}
-	/////////////// list colorsFLAG ///////////////////
-	// a slice of the colors in order,
-	// instead of output the map itself (which is random)
-	var wallpaperOrder = []string{
-		"black", "yellow", "blue", "red",
-		"black-b", "yellow-b", "blue-b", "red-b",
-
-		"white", "green", "magenta", "cyan",
-		"white-b", "green-b", "magenta-b", "cyan-b",
-
-		"akira", "blender", "yoshi", "grimace",
-		"akira-b", "blender-b", "yoshi-b", "grimace-b",
-
-		"pikachu", "stitchy", "kirby", "teddy",
-		"pikachu-b", "stitchy-b", "kirby-b", "teddy-b",
-	}
 
 	var listTitle = lipgloss.NewStyle().
 		Bold(true).

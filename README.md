@@ -1,11 +1,14 @@
 <div align="center">
 
+<img src="assets/wallah-logo.png" width="50%">
+
+</br>
+
 ![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/stonkol/wallah?sort=semver)
 ![Go Version](https://img.shields.io/github/go-mod/go-version/stonkol/wall-cli)
 ![Build Status](https://github.com/stonkol/wallah/actions/workflows/go.yml/badge.svg)
 [![Go Report Card](https://goreportcard.com/badge/github.com/stonkol/wall-cli)](https://goreportcard.com/report/github.com/stonkol/wall-cli)
 
-<img src="assets/wallah-logo.png" width="50%">
 </div>
 
 wallah-cli is a CLI which you can change your macOS wallpaper, in which the menu bar part is black, in order to hide that ugly notch. Furthermore, it is less distracting if you have the menu bar auto-hide enabled.
@@ -105,11 +108,11 @@ Based on 8 famous characters, each with their own light and dark mode. Add `b-` 
 - [x] --list flag
 - [x] have a working binary working alone
 - [x] Make a logo to put on the top of the README on GitHub
-- [ ] have a gif of using wallah using a tape of [vhs](https://github.com/charmbracelet/vhs) in readme.
-- [ ] set random color for the wallah `-r` `--random`
-- [ ] Let the user be able to have settings
+- [x] set random color for the wallah `-r` `--random`
 - [ ] change to previous color wallah `-p` `--previous`
-- [ ] change to previous color wallah `-n` `--next` (which is the same as random)
+- [ ] set a wallpaper to all the desktops `-a` `--all`
+- [ ] have a gif of using wallah using a tape of [vhs](https://github.com/charmbracelet/vhs) in readme.
+- [ ] Let the user be able to have settings
 - [ ] if input `wallah mama`, easter egg appears
 
 ### Styling the cli
