@@ -44,13 +44,13 @@ Flags:
 
 			if listFlag || versionFlag {
 				if len(args) != 0 {
-					return fmt.Errorf("no arguments allowed when using --list or --version")
+					printErrorMessage("No arguments allowed when using --list or --version.")
 				}
 				return nil
 			}
 
 			if len(args) != 1 {
-				return fmt.Errorf("requires exactly one argument")
+				printErrorMessage("Requires exactly one argument.")
 			}
 			return nil
 		},
@@ -61,14 +61,18 @@ Flags:
 			// Check if --list flag is set
 			listFlag, err := cmd.Flags().GetBool("list")
 			if err != nil {
-				fmt.Println("Error reading flags:", err)
+				printErrorMessage("problem for reading flags:")
+				printErr(err)
+				// printTwoErrorMessages(, err)
 				os.Exit(1)
 			}
 
 			// Check if --version flag is set
 			versionFlag, err := cmd.Flags().GetBool("version")
 			if err != nil {
-				fmt.Println("Error reading flags:", err)
+				printErrorMessage("problem for reading flags:")
+				printErr(err)
+				// printTwoErrorMessages(, err)
 				os.Exit(1)
 			}
 
@@ -76,7 +80,7 @@ Flags:
 				versionStyle := lipgloss.NewStyle().
 					Foreground(lipgloss.Color("#ff7e23")) //orange
 
-				versionLine := "version" + version
+				versionLine := "version " + version
 				fmt.Println(versionStyle.Render(versionLine))
 				return
 			}
@@ -87,9 +91,9 @@ Flags:
 			}
 
 			//////////////// INPUT CHECK //////////////
-			// Normal behavior: expect exactly one positional argument (color)
+			// Expect exactly one positional argument (one color)
 			if len(args) != 1 {
-				fmt.Println("You must specify exactly one color. 🥲")
+				printErrorMessage("You must specify exactly one color.")
 				cmd.Help()
 				os.Exit(1)
 			}
@@ -99,7 +103,9 @@ Flags:
 			// Call the func to change the wallpaper using the provided color
 			err = changeWallpaper(colorName)
 			if err != nil {
-				fmt.Printf("Error changing to the color '%s' 🥲 %s\n", colorName, err)
+				fullMessage := fmt.Sprintf("Error changing the wallah to '%s'.", colorName)
+				printErrorMessage(fullMessage)
+				printErr(err)
 				os.Exit(1)
 			}
 
@@ -111,14 +117,15 @@ Flags:
 	// Add flags
 	rootCmd.Flags().BoolP("list", "l", false, "list available colors")
 
-	rootCmd.Flags().BoolP("version", "v", false, "current version:")
+	rootCmd.Flags().BoolP("version", "v", false, "current version")
 
 	// Set custom help template
 	rootCmd.SetHelpTemplate(customHelpTemplate)
 
 	// Execute the root command, which parses arguments and runs the Run function
 	if err := rootCmd.Execute(); err != nil {
-		fmt.Println("Error executing command:", err)
+		printErrorMessage("Error executing command: ")
+		printErr(err)
 		os.Exit(1)
 	}
 }

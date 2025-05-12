@@ -37,16 +37,16 @@ func printList() {
 
 	var listTitle = lipgloss.NewStyle().
 		Bold(true).
-		Foreground(lipgloss.Color("#FAFAFA")).
-		Background(lipgloss.Color("#7D56F4")).
+		Foreground(lipgloss.Color("#a2bcd0")).
+		// Background(lipgloss.Color("#242521")).
 		PaddingTop(1).
 		PaddingBottom(1).
 		Align(lipgloss.Center).
 		Width(60)
 
-	fmt.Println("")
-	fmt.Println(listTitle.Render("Colors Available"))
-	fmt.Println("")
+	// fmt.Println("")
+	fmt.Println(listTitle.Render("--- colors available ---"))
+	// fmt.Println("")
 
 	// Style each color label with lipgloss
 	var styledLabels []string
@@ -57,7 +57,7 @@ func printList() {
 			fg, bg = c[0], c[1]
 		}
 		style := lipgloss.NewStyle().
-			Bold(true).
+			// Bold(true).
 			Foreground(lipgloss.Color(fg)).
 			Background(lipgloss.Color(bg)).
 			Align(lipgloss.Center).

@@ -106,8 +106,11 @@ Based on 8 famous characters, each with their own light and dark mode. Add `b-` 
 - [x] have a working binary working alone
 - [x] Make a logo to put on the top of the README on GitHub
 - [ ] have a gif of using wallah using a tape of [vhs](https://github.com/charmbracelet/vhs) in readme.
-- [ ] set random color for the wallah `r` `--random`
-- [ ] change to previous color wallah `r` `--random`
+- [ ] set random color for the wallah `-r` `--random`
+- [ ] Let the user be able to have settings
+- [ ] change to previous color wallah `-p` `--previous`
+- [ ] change to previous color wallah `-n` `--next` (which is the same as random)
+- [ ] if input `wallah mama`, easter egg appears
 
 ### Styling the cli
 
@@ -121,10 +124,7 @@ Based on 8 famous characters, each with their own light and dark mode. Add `b-` 
 - [x] Let users set the wallpaper for dark mode and light mode, which will change according to the system settings.
 - [ ] Include a `-d` `--dark` and `-l` `--light` flags for toggling mode
 - [ ] Let user enable/disable auto-light/dark mode.
-- [ ] Let users change the path of the wallpapers
-
-- [ ] A script to change the color of the wall according to system settings.
-- [ ] Let the user setting if
+- [ ] Change toggle dark mode of the wall (between [color] and [color]-b) according to system settings.
 
 ### Add more wallpapers
 
@@ -132,8 +132,9 @@ Based on 8 famous characters, each with their own light and dark mode. Add `b-` 
 - [ ] 16" MacBook Pro version.
 - [ ] 13" and 15" MacBook Air
 
-### Future big features
+### Possible Future Features
 
+- [ ] Let users change the wallpaper to an image
 - Dynamic wallpaper creator based on users input color
     - [ ] ANSI 16 support
     - [ ] ANSI 256 support
