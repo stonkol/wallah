@@ -27,6 +27,11 @@ If it is installed correctly, this will set your wallpaper to blue:
 wallah blue
 ```
 
+<div align="center">
+<img src="assets/color-list.png" width="66%">
+<>Colors available<>
+</div>
+
 ## Index
 
 1. [Build yourself](#1-build-yourself)
@@ -58,19 +63,30 @@ sudo mv wallah /usr/local/bin/
 sudo chmod +x /usr/local/bin/wallah # make the file executable
 ```
 
+1. macOS may require explicit permission for apps (including Terminal or the compiled CLI binary) to change the wallpaper.
+1. macOS may ask to accept permissions the first time your run the application.
+
 ### 1.3 Try it out
 
 ```sh
-wallah -v        # show version
 wallah -h        # show help
 wallah -l        # show list of colors available
+wallah -r        # set a random color
+wallah -v        # show version
 wallah blue      # set blue (#0000EE)
 wallah blue-b    # set bright blue (#5C5CFF)
 wallah pikachu   # set pikachu color (#F8A21C)
 ```
 
-1. macOS may require explicit permission for apps (including Terminal or the compiled CLI binary) to change the wallpaper.
-1. macOS may ask to accept permissions the first time your run the application.
+### 1.4 Visuals
+
+Set a wallpaper: `wallah akira`
+
+[]()
+
+Show list: `wallah -l`
+
+[]()
 
 ## 2. Colors included
 
@@ -132,21 +148,42 @@ Based on 8 famous characters, each with their own light and dark mode. Add `b-` 
 ### Add more wallpapers
 
 - [x] Include the 16 [ANSI colors](https://en.wikipedia.org/wiki/List_of_software_palettes)
-- [ ] 16" MacBook Pro version.
-- [ ] 13" and 15" MacBook Air
 
-### Possible Future Features
+### Future Features
+
+#### Image
 
 - [ ] Let users change the wallpaper to an image
-- Dynamic wallpaper creator based on users input color
-    - [ ] ANSI 16 support
-    - [ ] ANSI 256 support
-    - [ ] True Color (HEX) support
-    - [ ] Adaptive Colors (specify color options for light and dark mode)
-    - [ ] Gradient support
-    - [ ] Adaptive Gradient support
+    - [ ] apply de-notch to the wallpaper
 
-- [ ] Have animations when changing the wallpaper
+#### Init select prompt
+
+The first time the users runs wallah will prompt them to select a device. Then choose if the wallpaper will have a [black/white/choose a color] top menu bar or without.
+
+#### Dynamic Wallpaper Creator
+based on users input color
+
+##### Colors
+
+- [ ] ANSI 16/256 support
+- [ ] True Color (HEX) support
+- [ ] Adaptive Colors (specify color options for light and dark mode)
+- [ ] Gradient support (user input 2 to 3 colors and the direction)
+- [ ] Adaptive Gradient support
+
+> [!info] Adaptive Gradient
+> same as gradient but will change depending on the sun, like the native wallpaper on macOS
+
+##### Device support
+- [ ] no-notch devices
+- [ ] 14" and 16" MacBook Pro
+- [ ] 13" and 15" MacBook Air
+
+- [ ] Linux support
+
+#### Animations
+
+- [ ] When changing the wallpaper
 
 ## 4. How it works
 

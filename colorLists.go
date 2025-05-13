@@ -9,17 +9,22 @@ package main
 // a slice of the colors in order,
 // instead of output the map itself (which is random)
 var wallpaperOrder = []string{
-	"black", "yellow", "blue", "red",
-	"black-b", "yellow-b", "blue-b", "red-b",
-
-	"white", "green", "magenta", "cyan",
-	"white-b", "green-b", "magenta-b", "cyan-b",
-
-	"akira", "blender", "yoshi", "grimace",
-	"akira-b", "blender-b", "yoshi-b", "grimace-b",
-
-	"pikachu", "stitchy", "kirby", "teddy",
-	"pikachu-b", "stitchy-b", "kirby-b", "teddy-b",
+	"black", "black-b",
+	"teddy", "teddy-b",
+	"yellow", "yellow-b",
+	"pikachu", "pikachu-b",
+	"cyan", "cyan-b",
+	"blender", "blender-b",
+	"blue", "blue-b",
+	"stitchy", "stitchy-b",
+	"white", "white-b",
+	"kirby", "kirby-b",
+	"red", "red-b",
+	"akira", "akira-b",
+	"green", "green-b",
+	"yoshi", "yoshi-b",
+	"magenta", "magenta-b",
+	"grimace", "grimace-b",
 }
 
 var colorStyles = map[string][2]string{
@@ -27,26 +32,26 @@ var colorStyles = map[string][2]string{
 	// lowercase for hex recommended for compatibility
 	// 0 is black, f is white
 	// ansi 16
-	"black":     {"#fff", "#000000"},
-	"blue":      {"#fff", "#0000ff"},
-	"cyan":      {"#000", "#00cdcd"},
-	"green":     {"#fff", "#00dd00"},
-	"magenta":   {"#fff", "#cd00cd"},
-	"red":       {"#fff", "#cd0000"},
-	"yellow":    {"#000", "#cdcd00"},
-	"white":     {"#000", "#e5e5e5"},
-	"black-b":   {"#fff", "#7f7f7f"},
-	"blue-b":    {"#fff", "#5c5cff"},
-	"cyan-b":    {"#000", "#00ffff"},
-	"green-b":   {"#000", "#00ff00"},
-	"magenta-b": {"#fff", "#ff00ff"},
-	"red-b":     {"#fff", "#ff0000"},
-	"yellow-b":  {"#000", "#ffff00"},
-	"white-b":   {"#000", "#ffffff"},
+	"black":     {"#ffffff", "#000000"},
+	"blue":      {"#ffffff", "#0000ff"},
+	"cyan":      {"#4f4f4f", "#00cdcd"},
+	"green":     {"#ffffff", "#00dd00"},
+	"magenta":   {"#ffffff", "#cd00cd"},
+	"red":       {"#ffffff", "#cd0000"},
+	"yellow":    {"#4f4f4f", "#cdcd00"},
+	"white":     {"#4f4f4f", "#e5e5e5"},
+	"black-b":   {"#ffffff", "#7f7f7f"},
+	"blue-b":    {"#ffffff", "#5c5cff"},
+	"cyan-b":    {"#4f4f4f", "#00ffff"},
+	"green-b":   {"#ffffff", "#00ff00"},
+	"magenta-b": {"#ffffff", "#ff00ff"},
+	"red-b":     {"#ffffff", "#ff0000"},
+	"yellow-b":  {"#4f4f4f", "#ffff00"},
+	"white-b":   {"#4f4f4f", "#ffffff"},
 
 	// bonus
-	"orange":   {"#000", "#ff5516"},
-	"orange-b": {"#000", "#ff7e23"},
+	"orange":   {"#fff", "#ff5516"},
+	"orange-b": {"#fff", "#ff7e23"},
 
 	// char 16
 	"akira":     {"#fff", "#ab2f1a"},
@@ -58,10 +63,10 @@ var colorStyles = map[string][2]string{
 	"teddy":     {"#fff", "#925923"},
 	"yoshi":     {"#fff", "#43a934"},
 	"akira-b":   {"#fff", "#df2626"},
-	"blender-b": {"#000", "#c2d6e2"},
+	"blender-b": {"#fff", "#c2d6e2"},
 	"grimace-b": {"#fff", "#8e1e8c"},
 	"kirby-b":   {"#fff", "#f49792"},
-	"pikachu-b": {"#000", "#f4db06"},
+	"pikachu-b": {"#fff", "#f4db06"},
 	"stitchy-b": {"#fff", "#69b8dc"},
 	"teddy-b":   {"#fff", "#d09249"},
 	"yoshi-b":   {"#fff", "#69c12b"},
