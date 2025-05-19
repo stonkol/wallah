@@ -125,12 +125,14 @@ Based on 8 famous characters, each with their own light and dark mode. Add `b-` 
 - [x] --help flag
 - [x] --list flag
 - [x] have a working binary working alone
+- [x] Include the 16 [ANSI colors](https://en.wikipedia.org/wiki/List_of_software_palettes)
 - [x] Make a logo to put on the top of the README on GitHub
 - [x] set random color for the wallah `-r` `--random`
 - [ ] change to previous color wallah `-p` `--previous`
 - [ ] set a wallpaper to all the desktops `-a` `--all`
 - [ ] have a gif of using wallah using a tape of [vhs](https://github.com/charmbracelet/vhs) in readme.
 - [ ] Let the user be able to have settings
+- [ ] autocompletion
 - [ ] if input `wallah mama`, easter egg appears
 
 ### Styling the cli
@@ -146,10 +148,6 @@ Based on 8 famous characters, each with their own light and dark mode. Add `b-` 
 - [ ] Include a `-d` `--dark` and `-l` `--light` flags for toggling mode
 - [ ] Let user enable/disable auto-light/dark mode.
 - [ ] Change toggle dark mode of the wall (between [color] and [color]-b) according to system settings.
-
-### Add more wallpapers
-
-- [x] Include the 16 [ANSI colors](https://en.wikipedia.org/wiki/List_of_software_palettes)
 
 ### Future Features
 
@@ -170,6 +168,10 @@ based on users input color
 - [ ] ANSI 16/256 support
 - [ ] True Color (HEX) support
 - [ ] Adaptive Colors (specify color options for light and dark mode)
+- [ ] Apply color themes - [ghostty](/Applications/Ghostty.app/Contents/Resources/ghostty/themes/GitLab-Dark) have a big collection
+    - e.g: Catppuccin for the ANSI 16 colors
+    - `wallah red -t catppuccin` it will apply the red of Catppuccin
+    - also can set the default theme: `wallah --set-theme catppuccin`
 - [ ] Gradient support (user input 2 to 3 colors and the direction)
 - [ ] Adaptive Gradient support
 
