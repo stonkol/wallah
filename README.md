@@ -84,11 +84,11 @@ wallah pikachu   # set pikachu color (#F8A21C)
 
 Set a wallpaper: `wallah akira`
 
-[]()
+<div align="center">
+<img src="assets/clit-visual.jpg" width="50%">
+</div>
 
 Show list: `wallah -l`
-
-[]()
 
 ## 2. Colors included
 
