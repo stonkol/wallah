@@ -29,7 +29,7 @@ wallah blue
 
 <div align="center">
 <img src="assets/color-list.png" width="66%">
-<>Colors available<>
+<p>Colors available</p>
 </div>
 
 ## Index
