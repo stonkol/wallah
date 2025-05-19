@@ -28,18 +28,20 @@ wallah blue
 ```
 
 <div align="center">
-<img src="assets/color-list.jpg" width="66%">
+</br>
 <p>Colors available</p>
+<img src="assets/color-list.jpg" width="66%">
+
 </div>
 
 ## Index
 
 1. [Build yourself](#1-build-yourself)
-2. [Colors included](#2-colors-included)
-3. [Having issues?](#3-having-issues)
-4. [How it works](#4-how-it-works)
-5. [Roadmap](#5-roadmap)
-6. [Contributing](#6-contributing)
+1. [Colors included](#2-colors-included)
+1. [How it works](#4-how-it-works)
+1. [Roadmap](#5-roadmap)
+1. [Having issues?](#5-having-issues)
+1. [Contributing](#6-contributing)
 
 ---
 
