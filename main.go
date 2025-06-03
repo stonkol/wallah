@@ -31,7 +31,7 @@ Flags:
 		Use:   "wallah",
 		Short: "A fast and simple CLI to change your macOS wallpaper and elegantly hide that ugly notch.", // A short description
 
-		Long: "\nHi I'm Wallah, I will help you to change your wallpaper to your desire color and get ride of that notch.\n\nWith wallah you can easily apply wallpapers featuring solid colors and rounded borders that blend seamlessly around the notch area.\n\nExample:\n  wallah [color]\t Set a wallpaper color\n  wallah random\t Randomly sets a wallpaper",
+		Long: "\nHi, I'm Wallah. I will help you change your wallpaper to your desired color and get rid of that notch.\n\nWith Wallah, you can easily apply wallpapers featuring solid colors and rounded borders that blend seamlessly around the notch area.\n\n----- HOW TO USE -------\n\nExample:\n  wallah [color]    Set a wallpaper color\n  wallah random     Randomly sets a wallpaper\n  wallah -l     list available colors",
 
 		// validation only in args
 		Args: func(cmd *cobra.Command, args []string) error {
@@ -50,19 +50,19 @@ Flags:
 
 			if listFlag || versionFlag || randomFlag {
 				if len(args) != 0 {
-					printErrorMessage("No arguments allowed when using a flag.")
+					// printErrorMessage("No arguments allowed when using a flag.")
 					return fmt.Errorf("no arguments allowed when using a flag.")
 				}
 				return nil
 			}
 
-			if len(args) != 1 {
-				printErrorMessage("Requires exactly one argument")
-				return fmt.Errorf("requires exactly one argument")
+			// Allow zero or one argument (for color or "random")
+			if len(args) > 1 {
+				// printErrorMessage("Requires one or more arguments")
+				return fmt.Errorf("Requires one or more arguments")
 			}
 
-			// Allow "random" as a positional argument
-			if args[0] == "random" {
+			if len(args) == 1 && args[0] == "random" {
 				return nil
 			}
 
@@ -129,7 +129,7 @@ Flags:
 			//////////////// INPUT CHECK //////////////
 			// Expect exactly one positional argument (one color)
 			if len(args) != 1 {
-				printErrorMessage("You must specify exactly one color.")
+				printErrorMessage("You must specify one color.")
 				cmd.Help()
 				os.Exit(1)
 			}

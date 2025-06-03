@@ -27,35 +27,3 @@ func printErr(err error) {
 
 	fmt.Printf("%s\n", errorStyle.Render(errString))
 }
-
-// func printErrorMessage(errorMessage string) {
-
-// 	errorTitle := lipgloss.NewStyle().
-// 		Foreground(lipgloss.Color("#f7fcfe")).
-// 		Background(lipgloss.Color("#db0f27")).
-// 		Padding(0, 1).
-// 		Render("ERROR")
-
-// 	errorStyle := lipgloss.NewStyle().
-// 		Foreground(lipgloss.Color("#db0f27"))
-
-// 	fullMessage := fmt.Sprintf("%s %s", errorTitle, errorStyle.Render(errorMessage))
-
-// 	fmt.Println(fullMessage)
-// }
-
-// func printTwoErrorMessages(errorMessage string, error error) {
-
-// 	errorTitle := lipgloss.NewStyle().
-// 		Foreground(lipgloss.Color("#f7fcfe")).
-// 		Background(lipgloss.Color("#db0f27")).
-// 		Padding(0, 1).
-// 		Render("ERROR")
-
-// 	errorStyle := lipgloss.NewStyle().
-// 		Foreground(lipgloss.Color("#db0f27"))
-
-// 	fullMessage := fmt.Sprintf("%s %s %s", errorTitle, errorStyle.Render(errorMessage), errorStyle.Render(error))
-
-// 	fmt.Println(fullMessage)
-// }
