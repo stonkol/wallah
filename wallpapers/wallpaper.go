@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+	"sort"
 )
 
 //go:embed mbp-14/*
@@ -28,8 +29,18 @@ var wallpaperFiles = map[string]string{
 	"teddy-b": "mbp-14/teddy-b.png", "yoshi-b": "mbp-14/yoshi-b.png",
 }
 
+// Names returns the wallpaper color names in sorted order.
+func Names() []string {
+	names := make([]string, 0, len(wallpaperFiles))
+	for name := range wallpaperFiles {
+		names = append(names, name)
+	}
+	sort.Strings(names)
+	return names
+}
+
 // Change sets the macOS wallpaper to one of the bundled color images.
-func Change(colorName string) error {
+func Change(colorName string, allDesktops bool) error {
 
 	// Look up the image file path corresponding
 	// to the given color in the wallpapers map
@@ -54,6 +65,7 @@ func Change(colorName string) error {
 	// Closes the open file descriptor associated with tmpFile.
 	// release the file handle and flush any buffered writes.
 	defer tmpFile.Close()
+	defer os.Remove(tmpFile.Name())
 
 	// Write the embedded image data to the temp file
 	if _, err := tmpFile.Write(data); err != nil {
@@ -67,7 +79,11 @@ func Change(colorName string) error {
 	// that tells macOS to set the wallpaper
 	// POSIX file "%s" converts the Go absolute path
 	// into a format AppleScript understands
-	script := fmt.Sprintf(`tell application "System Events" to set picture of every desktop to POSIX file "%s"`, absPath)
+	desktopTarget := "current desktop"
+	if allDesktops {
+		desktopTarget = "every desktop"
+	}
+	script := fmt.Sprintf(`tell application "System Events" to set picture of %s to POSIX file "%s"`, desktopTarget, absPath)
 
 	// run AppleScript command using the osascript cli
 	cmd := exec.Command("osascript", "-e", script)

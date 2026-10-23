@@ -72,12 +72,16 @@ sudo chmod +x /usr/local/bin/wallah # make the file executable
 
 ```sh
 wallah -h        # show help
+wallah -v        # show version
+
 wallah -l        # show list of colors available
 wallah -r        # set a random color
-wallah -v        # show version
 wallah blue      # set blue (#0000EE)
 wallah blue-b    # set bright blue (#5C5CFF)
 wallah pikachu   # set pikachu color (#F8A21C)
+
+wallah -p        # set previous wallpaper
+wallah -a red    # applies a red wallpaper to every desktop
 ```
 
 ### 1.4 Visuals

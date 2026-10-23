@@ -10,7 +10,7 @@ import (
 	"github.com/stonkol/wallah/wallpapers"
 )
 
-const version = "0.2.7 🫯"
+const version = "0.2.8 🦜"
 
 const customHelpTemplate = `{{with (or .Long .Short)}}{{. | trimTrailingWhitespaces}}
 
@@ -40,8 +40,12 @@ func NewCommand() *cobra.Command {
 			if err != nil {
 				return err
 			}
+			previousFlag, err := cmd.Flags().GetBool("previous")
+			if err != nil {
+				return err
+			}
 
-			if listFlag || versionFlag || randomFlag {
+			if listFlag || versionFlag || randomFlag || previousFlag {
 				if len(args) != 0 {
 					return fmt.Errorf("no arguments allowed when using a flag")
 				}
@@ -51,6 +55,14 @@ func NewCommand() *cobra.Command {
 				return fmt.Errorf("requires one argument")
 			}
 			return nil
+		},
+		ValidArgsFunction: func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+			if len(args) > 0 {
+				return nil, cobra.ShellCompDirectiveNoFileComp
+			}
+			completions := wallpapers.Names()
+			completions = append(completions, "random", "list", "version")
+			return completions, cobra.ShellCompDirectiveNoFileComp
 		},
 		RunE: func(cmd *cobra.Command, args []string) error {
 			listFlag, err := cmd.Flags().GetBool("list")
@@ -65,6 +77,14 @@ func NewCommand() *cobra.Command {
 			if err != nil {
 				return fmt.Errorf("problem reading random flag: %w", err)
 			}
+			previousFlag, err := cmd.Flags().GetBool("previous")
+			if err != nil {
+				return fmt.Errorf("problem reading previous flag: %w", err)
+			}
+			allDesktops, err := cmd.Flags().GetBool("all")
+			if err != nil {
+				return fmt.Errorf("problem reading all flag: %w", err)
+			}
 
 			if versionFlag || (len(args) == 1 && args[0] == "version") {
 				style := lipgloss.NewStyle().Foreground(lipgloss.Color("#ff7e23"))
@@ -77,7 +97,16 @@ func NewCommand() *cobra.Command {
 			}
 
 			colorName := ""
-			if randomFlag || (len(args) == 1 && args[0] == "random") {
+			if previousFlag {
+				history, err := loadColorHistory()
+				if err != nil {
+					return err
+				}
+				if history.Previous == "" {
+					return fmt.Errorf("there is no previous color yet; set a wallpaper color first")
+				}
+				colorName = history.Previous
+			} else if randomFlag || (len(args) == 1 && args[0] == "random") {
 				rng := rand.New(rand.NewSource(time.Now().UnixNano()))
 				colorName = wallpaperOrder[rng.Intn(len(wallpaperOrder))]
 			} else if len(args) == 1 {
@@ -89,8 +118,11 @@ func NewCommand() *cobra.Command {
 				return fmt.Errorf("you must specify one color")
 			}
 
-			if err := wallpapers.Change(colorName); err != nil {
+			if err := wallpapers.Change(colorName, allDesktops); err != nil {
 				return fmt.Errorf("error changing the wallah to '%s': %w", colorName, err)
+			}
+			if err := recordColor(colorName); err != nil {
+				return fmt.Errorf("wallpaper changed to '%s', but saving color history failed: %w", colorName, err)
 			}
 			printWall(colorName)
 			return nil
@@ -100,6 +132,8 @@ func NewCommand() *cobra.Command {
 	rootCmd.Flags().BoolP("list", "l", false, "list available colors")
 	rootCmd.Flags().BoolP("version", "v", false, "current version")
 	rootCmd.Flags().BoolP("random", "r", false, "set a random wallpaper color")
+	rootCmd.Flags().BoolP("previous", "p", false, "restore the previous wallpaper color")
+	rootCmd.Flags().BoolP("all", "a", false, "set the wallpaper on every desktop")
 	rootCmd.SetHelpTemplate(customHelpTemplate)
 	rootCmd.SilenceErrors = true
 	rootCmd.SilenceUsage = true

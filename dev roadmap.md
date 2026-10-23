@@ -1,12 +1,58 @@
 # Testing Notes
 
-## Try
+## Try it while dev
 
-```go
-go run . -l    // to list colors
-go run . blue  // set a blue wallpaper
-go run main.go red
+```sh
+go run . -l      # to list colors
+go run . blue    # set a blue wallpaper
 ```
+
+## How to update 
+
+### Update from local source
+To try the changes you have in your working copy, run this from the project directory:
+
+```sh
+go install .
+
+# Then start the installed app
+wallah list
+wallah version
+```
+
+### Update from Github 
+That installs your local code to `$(go env GOPATH)/bin`. Make sure that directory is on your **PATH**.
+
+To install from GitHub instead, the changes need to be committed and pushed first. Then run:
+
+```sh
+go install github.com/stonkol/wallah@main
+```
+
+Use `@latest` if you want the latest tagged release instead of the latest commit on **main**.
+
+## Autocompletion
+
+In your current Zsh session, run:
+
+```sh
+mkdir -p ~/.zsh/completions
+wallah completion zsh > ~/.zsh/completions/_wallah
+fpath=(~/.zsh/completions $fpath)
+autoload -Uz compinit && compinit
+```
+
+Now type `wallah blu` and press **Tab**. It should complete `blue` or offer `blue-b`.
+
+To keep completion working in new terminal sessions, add these lines to `~/.zshrc`:
+
+```sh
+fpath=(~/.zsh/completions $fpath)
+autoload -Uz compinit
+compinit
+```
+
+Then source it: `source ~/.zshrc`
 
 ## Roadmap
 
@@ -23,6 +69,7 @@ go run main.go red
 - [ ] have a gif of using wallah using a tape of [vhs](https://github.com/charmbracelet/vhs) in readme.
 - [ ] Let the user be able to have settings
 - [ ] autocompletion
+- [ ] update printwallah's wallahMenuBar for macos26 version which it will be a notch [color selected][notch][●][notch][color selected] instead of the [black][●][black]
 - [ ] if input `wallah mama`, easter egg appears
 
 ### Styling the cli

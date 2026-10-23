@@ -28,6 +28,7 @@ func printWall(colorName string) {
 		Render("your wallah is")
 
 	// holes := []rune{'○', '。', '●', '◯', '◎', '◉', '◌', '⚫', '⚪', '🕳'}
+	// make another version for macOS 26 style
 	wallahMenuBar := lipgloss.NewStyle().
 		Background(black).
 		Foreground(bg).
