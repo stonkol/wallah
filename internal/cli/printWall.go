@@ -1,6 +1,6 @@
 // This file contains the logic for printing the wallah, which is a preview of the color of the wallpaper in a more graphic way
 
-package main
+package cli
 
 import (
 	"fmt"
