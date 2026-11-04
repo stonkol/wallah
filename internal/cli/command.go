@@ -28,7 +28,7 @@ func NewCommand() *cobra.Command {
 	rootCmd := &cobra.Command{
 		Use:   "wallah",
 		Short: "A fast and simple CLI to change your macOS wallpaper and elegantly hide that ugly notch.",
-		Long:  "\nHi, I'm Wallah. I will help you change your wallpaper to your desired color and get rid of that notch.\n\nWith Wallah, you can easily apply wallpapers featuring solid colors and rounded borders that blend seamlessly around the notch area.\n\n----- HOW TO USE -------\n\nExample:\n  wallah [color]    Set a wallpaper color\n  wallah random     Randomly sets a wallpaper\n  wallah -l or list List available colors\n  wallah -v or version Show the version",
+		Long:  "\nHi, I'm Wallah. I will help you change your wallpaper to your desired color and get rid of that notch.\n\nWith Wallah, you can easily apply wallpapers featuring solid colors and rounded borders that blend seamlessly around the notch area.\n\n----- HOW TO USE -------\n\nExample:\n  wallah blue          Set a named wallpaper color\n  wallah ff6600        Set a custom hex color\n  wallah random        Randomly sets a wallpaper\n  wallah -l or list    List available colors\n  wallah -v or version Show the version",
 		Args: func(cmd *cobra.Command, args []string) error {
 			listFlag, err := cmd.Flags().GetBool("list")
 			if err != nil {

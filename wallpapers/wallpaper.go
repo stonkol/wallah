@@ -59,14 +59,30 @@ func Names() []string {
 // Color returns the foreground and wallpaper colors for a named color.
 func Color(name string) (Palette, bool) {
 	c, ok := palette[name]
-	return c, ok
+	if ok {
+		return c, true
+	}
+	parsed, err := parseHexColor(name)
+	if err != nil {
+		return Palette{}, false
+	}
+	background := fmt.Sprintf("#%02x%02x%02x", parsed.R, parsed.G, parsed.B)
+	luminance := 0.299*float64(parsed.R) + 0.587*float64(parsed.G) + 0.114*float64(parsed.B)
+	foreground := "#ffffff"
+	if luminance > 150 {
+		foreground = "#000000"
+	}
+	return Palette{Foreground: foreground, Background: background}, true
 }
 
 // Change renders a wallpaper for the selected display and applies it in macOS.
 func Change(colorName string, display DisplaySettings, allDesktops bool) error {
-	colors, ok := palette[colorName]
+	colors, ok := Color(colorName)
 	if !ok {
-		return fmt.Errorf("the color %q is not available", colorName)
+		return fmt.Errorf("invalid color %q: use a named color or a 3 or 6 digit hex value", colorName)
+	}
+	if _, named := palette[colorName]; !named {
+		colorName = colors.Background
 	}
 	wallpaperColor, err := parseHexColor(colors.Background)
 	if err != nil {

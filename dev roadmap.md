@@ -77,18 +77,18 @@ Then source it: `source ~/.zshrc`
 
 #### Init select prompt
 
-- [ ] init prompt
-    - [ ] The first time the users runs wallah (when the user type `wallah`) will prompt them to select a device.
+- [x] init prompt
+    - [x] The first time the users runs wallah (when the user type `wallah`) will prompt them to select a device.
         1. MacBook Pro 14"
         2. Macbook Pro 16"
         3. MacBook Air 13"
         4. MacBook Air 15"
-    - [ ] Then choose if the wallpaper will have a [black/white/choose a color] top menu bar.
-    - [ ] then chosse the corner border 
-        - [ ] macOS 26 (rounder)
-        - [ ] macOS 15
+    - [x] Then choose if the wallpaper will have a [black/white/choose a color] top menu bar.
+    - [x] then chosse the corner border 
+        - [x] macOS 26 (rounder)
+        - [x] macOS 15
     - Previously all the wallpapers where already made by a graphic editor, but now i want this Go app to make the wallpaper image in real time when the user input the color, so it will clip mask the wallpaper to a be according to the user selected MacBook. So it will have a menu bar part in according to waht the user have selected and the other part of the wallpaper as what the user have selected. And then make corner borders like in macOS 26 which is more rounder or before (less rounder).
-    - after user have selected these three parameters, tell the user that now can select colors from the list above, showing the printList. these three settings above will be saved, and the user will only need to type a color next time it uses wallah, but if uses in the future type wallah -s or wallah --settings it will appear again the init prompt
+    - after user have selected these three parameters, tell the user that now can select colors from the list above, showing the printList. these three settings above will be saved, and the user will only need to type a color next time it uses wallah, but if uses in the future type `wallah -s` or `wallah --settings` it will appear again the init prompt
 
 - [ ] update printwallah's wallahMenuBar for macos26 version which it will be a notch [color selected][notch][●][notch][color selected] instead of the [black][●][black]
 
