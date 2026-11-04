@@ -1,115 +1,402 @@
 package cli
 
 import (
-	"bufio"
 	"errors"
 	"fmt"
 	"io"
-	"os"
-	"os/exec"
 	"strconv"
 	"strings"
+	"unicode/utf8"
 
+	tea "charm.land/bubbletea/v2"
+	"github.com/charmbracelet/lipgloss"
 	"github.com/stonkol/wallah/internal/settings"
 	"github.com/stonkol/wallah/wallpapers"
 )
 
+var errSetupCanceled = errors.New("settings canceled")
+
+type settingsMenuModel struct {
+	config       settings.Config
+	cursor       int
+	section      int
+	option       int
+	focusOptions bool
+	editingColor bool
+	colorInput   string
+	message      string
+	canceled     bool
+	width        int
+}
+
+var deviceOptions = []string{
+	"MacBook Pro 14\"",
+	"MacBook Pro 16\"",
+	"MacBook Air 13\"",
+	"MacBook Air 15\"",
+}
+
+var menuBarOptions = []string{"Black", "White", "Transparent", "Custom"}
+var cornerOptions = []string{"macOS 26 (round)", "macOS 15 (less round)", "macOS X (square corners)"}
+
 func promptSettings(in io.Reader, out io.Writer) (settings.Config, error) {
-	reader := bufio.NewReader(in)
-	fmt.Fprintln(out, "Welcome to Wallah.\n")
-
-	device, err := promptChoice(in, out, "Select your Mac:", []string{
-		"MacBook Pro 14\"",
-		"MacBook Pro 16\"",
-		"MacBook Air 13\"",
-		"MacBook Air 15\"",
-	})
+	config, configured, err := settings.Load()
 	if err != nil {
 		return settings.Config{}, err
 	}
-	deviceIDs := map[string]string{
-		"MacBook Pro 14\"": "mbp-14",
-		"MacBook Pro 16\"": "mbp-16",
-		"MacBook Air 13\"": "mba-13",
-		"MacBook Air 15\"": "mba-15",
+	if !configured {
+		config = settings.Config{
+			Device:       "mbp-14",
+			MenuBarColor: "#000000",
+			CornerStyle:  "macos26",
+		}
 	}
 
-	menuChoice, err := promptChoice(in, out, "Choose the menu bar color:", []string{
-		"Black", "White", "Choose a color",
-	})
-	if err != nil {
-		return settings.Config{}, err
+	model := settingsMenuModel{config: config, section: 0, width: 80}
+	program := tea.NewProgram(model, tea.WithInput(in), tea.WithOutput(out))
+	finalModel, err := program.Run()
+	if errors.Is(err, tea.ErrInterrupted) {
+		return settings.Config{}, errSetupCanceled
 	}
-	menuBarColor := "#000000"
-	switch menuChoice {
-	case "White":
-		menuBarColor = "#ffffff"
-	case "Choose a color":
-		for {
-			fmt.Fprint(out, "Enter a color name (for example blue) or a hex color (#RRGGBB): ")
-			value, err := readLine(reader)
+	if err != nil {
+		return settings.Config{}, fmt.Errorf("run settings menu: %w", err)
+	}
+	result, ok := finalModel.(settingsMenuModel)
+	if !ok {
+		return settings.Config{}, fmt.Errorf("settings menu returned an unexpected model")
+	}
+	if result.canceled {
+		return settings.Config{}, errSetupCanceled
+	}
+	return result.config, nil
+}
+
+func (m settingsMenuModel) Init() tea.Cmd { return nil }
+
+func (m settingsMenuModel) Update(message tea.Msg) (tea.Model, tea.Cmd) {
+	if size, ok := message.(tea.WindowSizeMsg); ok {
+		m.width = size.Width
+		return m, nil
+	}
+	key, ok := message.(tea.KeyPressMsg)
+	if !ok {
+		return m, nil
+	}
+	pressed := key.String()
+	if pressed == "ctrl+c" {
+		m.canceled = true
+		return m, tea.Quit
+	}
+
+	if m.editingColor {
+		switch pressed {
+		case "enter":
+			color, err := normalizeMenuColor(m.colorInput)
 			if err != nil {
-				return settings.Config{}, err
+				m.message = err.Error()
+				return m, nil
 			}
-			menuBarColor, err = normalizeMenuColor(value)
-			if err == nil {
-				break
+			m.config.MenuBarColor = color
+			m.config.MenuBarMatchesWallpaper = false
+			m.editingColor = false
+			m.focusOptions = false
+			m.message = ""
+		case "esc", "left":
+			m.editingColor = false
+			m.focusOptions = false
+			m.message = ""
+		case "backspace":
+			if len(m.colorInput) > 0 {
+				_, size := utf8.DecodeLastRuneInString(m.colorInput)
+				m.colorInput = m.colorInput[:len(m.colorInput)-size]
 			}
-			fmt.Fprintf(out, "%v\n", err)
+		default:
+			if key.Mod == 0 {
+				m.colorInput += key.Text
+				m.message = ""
+			}
 		}
+		return m, nil
 	}
 
-	cornerChoice, err := promptChoice(in, out, "Choose the screen corner style:", []string{
-		"macOS 26 (rounder)", "macOS 15",
-	})
-	if err != nil {
-		return settings.Config{}, err
-	}
-	cornerStyle := "macos26"
-	if cornerChoice == "macOS 15" {
-		cornerStyle = "macos15"
+	if pressed == "q" {
+		return m, tea.Quit
 	}
 
-	return settings.Config{
-		Device:       deviceIDs[device],
-		MenuBarColor: menuBarColor,
-		CornerStyle:  cornerStyle,
-	}, nil
+	if m.focusOptions && m.section >= 0 {
+		options := m.options()
+		switch pressed {
+		case "up", "k":
+			if m.option > 0 {
+				m.option--
+			}
+		case "down", "j":
+			if m.option < len(options)-1 {
+				m.option++
+			}
+		case "esc", "left":
+			m.focusOptions = false
+		case "enter", "right":
+			m.selectOption(options[m.option])
+		}
+		return m, nil
+	}
+
+	switch pressed {
+	case "up", "k":
+		if m.cursor > 0 {
+			m.cursor--
+		}
+		m.updateSection()
+	case "down", "j":
+		if m.cursor < 3 {
+			m.cursor++
+		}
+		m.updateSection()
+	case "enter", "right", "space":
+		if m.cursor == 3 {
+			return m, tea.Quit
+		}
+		m.section = m.cursor
+		m.option = m.selectedOptionIndex()
+		m.focusOptions = true
+	case "esc":
+		m.canceled = true
+		return m, tea.Quit
+	}
+	return m, nil
 }
 
-func promptChoice(in io.Reader, out io.Writer, title string, options []string) (string, error) {
-	executable, err := os.Executable()
-	if err != nil {
-		return "", fmt.Errorf("find Wallah executable for setup picker: %w", err)
+func (m *settingsMenuModel) updateSection() {
+	if m.cursor >= 3 {
+		m.section = -1
+		return
 	}
-	args := []string{"__wallah-choose", title}
-	args = append(args, options...)
-	cmd := exec.Command(executable, args...)
-	cmd.Stdin = in
-	cmd.Stderr = out
-	selection, err := cmd.Output()
-	if err != nil {
-		var exitErr *exec.ExitError
-		if errors.As(err, &exitErr) && exitErr.ExitCode() == 1 {
-			return "", fmt.Errorf("setup selection canceled")
-		}
-		return "", fmt.Errorf("run bundled Gum picker: %w", err)
-	}
-	choice := strings.TrimSpace(string(selection))
-	for _, option := range options {
-		if choice == option {
-			return choice, nil
-		}
-	}
-	return "", fmt.Errorf("gum returned an unknown choice %q", choice)
+	m.section = m.cursor
+	m.option = m.selectedOptionIndex()
 }
 
-func readLine(reader *bufio.Reader) (string, error) {
-	line, err := reader.ReadString('\n')
-	if err != nil && len(line) == 0 {
-		return "", err
+func (m *settingsMenuModel) selectOption(choice string) {
+	switch m.section {
+	case 0:
+		deviceIDs := map[string]string{
+			"MacBook Pro 14\"": "mbp-14",
+			"MacBook Pro 16\"": "mbp-16",
+			"MacBook Air 13\"": "mba-13",
+			"MacBook Air 15\"": "mba-15",
+		}
+		m.config.Device = deviceIDs[choice]
+	case 1:
+		switch choice {
+		case "Black":
+			m.config.MenuBarColor = "#000000"
+			m.config.MenuBarMatchesWallpaper = false
+		case "White":
+			m.config.MenuBarColor = "#ffffff"
+			m.config.MenuBarMatchesWallpaper = false
+		case "Transparent":
+			m.config.MenuBarMatchesWallpaper = true
+		case "Custom":
+			m.editingColor = true
+			m.colorInput = "#"
+			m.message = "Enter a color name or hex value, then press Enter."
+			m.focusOptions = false
+			return
+		}
+	case 2:
+		switch {
+		case strings.HasPrefix(choice, "macOS 15"):
+			m.config.CornerStyle = "macos15"
+		case strings.HasPrefix(choice, "macOS X"):
+			m.config.CornerStyle = "macosx"
+		default:
+			m.config.CornerStyle = "macos26"
+		}
 	}
-	return strings.TrimSpace(line), nil
+	m.focusOptions = false
+}
+
+func (m settingsMenuModel) options() []string {
+	switch m.section {
+	case 0:
+		return deviceOptions
+	case 1:
+		return menuBarOptions
+	case 2:
+		return cornerOptions
+	default:
+		return nil
+	}
+}
+
+func (m settingsMenuModel) View() tea.View {
+	const leftWidth, rightWidth = 18, 41
+	lines := make([]string, 0, 12)
+	leftItems := []string{"Device", "Menubar", "Corner", "Save and exit"}
+	rightLines := m.rightPaneLines()
+	lineCount := max(len(leftItems), len(rightLines))
+	for i := 0; i < lineCount; i++ {
+		leftText := ""
+		if i < len(leftItems) {
+			leftText = leftItems[i]
+			if i == m.cursor {
+				if !m.focusOptions && !m.editingColor {
+					leftText = "› " + leftText
+				}
+				leftText = lipgloss.NewStyle().Bold(true).Foreground(lipgloss.Color("#ff7e23")).Render(leftText)
+			} else {
+				leftText = "  " + leftText
+			}
+		}
+		rightText := ""
+		if i < len(rightLines) {
+			rightText = rightLines[i]
+		}
+		leftColumn := lipgloss.NewStyle().Width(leftWidth).Align(lipgloss.Right).Render(leftText)
+		rightColumn := lipgloss.NewStyle().Width(rightWidth).Align(lipgloss.Left).Render(rightText)
+		lines = append(lines, leftColumn+" │ "+rightColumn)
+	}
+	lines = append(lines, "")
+	footer := "↑/↓ navigate • ←/→ select • Q save and exit"
+	if m.focusOptions || m.editingColor {
+		footer = "↑/↓ choose • Enter apply • ← back • Ctrl+C cancel"
+	}
+	if m.editingColor {
+		footer = "Type color after # • Enter apply • Esc back"
+	}
+	lines = append(lines, lipgloss.PlaceHorizontal(62, lipgloss.Center, footer))
+	return tea.NewView(renderSettingsBox(lines, m.width))
+}
+
+func (m settingsMenuModel) rightPaneLines() []string {
+	if m.editingColor {
+		lines := []string{"Custom menu bar color", "", "  " + m.colorInput + "_"}
+		if m.message != "" {
+			lines = append(lines, "", m.message)
+		}
+		return lines
+	}
+	if m.section < 0 {
+		return []string{"", "", ""}
+	}
+	lines := make([]string, 0, len(m.options()))
+	for optionIndex, option := range m.options() {
+		marker := "  "
+		if m.focusOptions && optionIndex == m.option {
+			marker = "› "
+		}
+		optionLine := marker + option
+		if m.optionSelected(option) {
+			optionLine += " ✓"
+		}
+		if m.focusOptions && optionIndex == m.option {
+			optionLine = lipgloss.NewStyle().Foreground(lipgloss.Color("#ff7e23")).Bold(true).Render(optionLine)
+		}
+		lines = append(lines, optionLine)
+	}
+	return lines
+}
+
+func renderSettingsBox(lines []string, terminalWidth int) string {
+	const innerWidth = 62
+	title := " Wallah settings "
+	remaining := innerWidth - lipgloss.Width(title)
+	left := remaining / 2
+	right := remaining - left
+	border := lipgloss.NewStyle().Foreground(lipgloss.Color("#ff7e23"))
+	top := "╭" + strings.Repeat("─", left) + border.Render(title) + strings.Repeat("─", right) + "╮"
+	boxLines := []string{top, "│" + strings.Repeat(" ", innerWidth) + "│"}
+	for _, line := range lines {
+		padded := lipgloss.NewStyle().Width(innerWidth).Render(line)
+		boxLines = append(boxLines, "│"+padded+"│")
+	}
+	boxLines = append(boxLines,
+		"│"+strings.Repeat(" ", innerWidth)+"│",
+		"╰"+strings.Repeat("─", innerWidth)+"╯",
+	)
+	box := strings.Join(boxLines, "\n")
+	if terminalWidth > lipgloss.Width(box) {
+		box = lipgloss.PlaceHorizontal(terminalWidth, lipgloss.Center, box)
+	}
+	// Leave the terminal cursor below the bottom border so follow-up output
+	// (such as the saved-settings notice) cannot overwrite it.
+	return box + "\n"
+}
+
+func (m settingsMenuModel) selectedOptionIndex() int {
+	for i, option := range m.options() {
+		if m.optionSelected(option) {
+			return i
+		}
+	}
+	return 0
+}
+
+func (m settingsMenuModel) optionSelected(option string) bool {
+	switch m.section {
+	case 0:
+		return map[string]string{
+			"MacBook Pro 14\"": "mbp-14",
+			"MacBook Pro 16\"": "mbp-16",
+			"MacBook Air 13\"": "mba-13",
+			"MacBook Air 15\"": "mba-15",
+		}[option] == m.config.Device
+	case 1:
+		if option == "Transparent" {
+			return m.config.MenuBarMatchesWallpaper
+		}
+		if m.config.MenuBarMatchesWallpaper {
+			return false
+		}
+		switch option {
+		case "Black":
+			return strings.EqualFold(m.config.MenuBarColor, "#000000")
+		case "White":
+			return strings.EqualFold(m.config.MenuBarColor, "#ffffff")
+		case "Custom":
+			return !strings.EqualFold(m.config.MenuBarColor, "#000000") && !strings.EqualFold(m.config.MenuBarColor, "#ffffff")
+		}
+	case 2:
+		return strings.HasPrefix(option, "macOS 15") && m.config.CornerStyle == "macos15" || strings.HasPrefix(option, "macOS 26") && m.config.CornerStyle == "macos26" || strings.HasPrefix(option, "macOS X") && m.config.CornerStyle == "macosx"
+	}
+	return false
+}
+
+func (m settingsMenuModel) deviceLabel() string {
+	labels := map[string]string{
+		"mbp-14": "MacBook Pro 14\"",
+		"mbp-16": "MacBook Pro 16\"",
+		"mba-13": "MacBook Air 13\"",
+		"mba-15": "MacBook Air 15\"",
+	}
+	if label := labels[m.config.Device]; label != "" {
+		return label
+	}
+	return "Select a device"
+}
+
+func (m settingsMenuModel) menuBarLabel() string {
+	if m.config.MenuBarMatchesWallpaper {
+		return "Transparent (wallpaper color)"
+	}
+	switch strings.ToLower(m.config.MenuBarColor) {
+	case "#000000":
+		return "Black"
+	case "#ffffff":
+		return "White"
+	default:
+		return m.config.MenuBarColor
+	}
+}
+
+func (m settingsMenuModel) cornerLabel() string {
+	if m.config.CornerStyle == "macosx" {
+		return "macOS X (square corners)"
+	}
+	if m.config.CornerStyle == "macos15" {
+		return "macOS 15 (less round)"
+	}
+	return "macOS 26 (round)"
 }
 
 func normalizeMenuColor(value string) (string, error) {

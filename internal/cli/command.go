@@ -1,6 +1,7 @@
 package cli
 
 import (
+	"errors"
 	"fmt"
 	"math/rand"
 	"time"
@@ -101,8 +102,12 @@ func NewCommand() *cobra.Command {
 
 			if settingsFlag {
 				if _, err := configure(cmd); err != nil {
+					if errors.Is(err, errSetupCanceled) {
+						return nil
+					}
 					return err
 				}
+				fmt.Fprintln(cmd.OutOrStdout())
 				fmt.Fprintln(cmd.OutOrStdout(), "Settings saved. You can now choose a wallpaper color:")
 				printList()
 				return nil
@@ -126,8 +131,12 @@ func NewCommand() *cobra.Command {
 			if !configured {
 				config, err = configure(cmd)
 				if err != nil {
+					if errors.Is(err, errSetupCanceled) {
+						return nil
+					}
 					return err
 				}
+				fmt.Fprintln(cmd.OutOrStdout())
 				fmt.Fprintln(cmd.OutOrStdout(), "Settings saved. You can now choose a wallpaper color:")
 				printList()
 				showedSetupList = true
@@ -156,9 +165,10 @@ func NewCommand() *cobra.Command {
 			}
 
 			display := wallpapers.DisplaySettings{
-				Device:       config.Device,
-				MenuBarColor: config.MenuBarColor,
-				CornerStyle:  config.CornerStyle,
+				Device:                  config.Device,
+				MenuBarColor:            config.MenuBarColor,
+				MenuBarMatchesWallpaper: config.MenuBarMatchesWallpaper,
+				CornerStyle:             config.CornerStyle,
 			}
 			if err := wallpapers.Change(colorName, display, allDesktops); err != nil {
 				return fmt.Errorf("error changing the wallah to '%s': %w", colorName, err)

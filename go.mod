@@ -3,6 +3,7 @@ module github.com/stonkol/wallah
 go 1.27.3
 
 require (
+	charm.land/bubbletea/v2 v2.0.10
 	charm.land/gum/v2 v2.0.2
 	github.com/charmbracelet/lipgloss v1.1.1-0.20250404203927-76690c660834
 	github.com/gookit/color v1.5.4
@@ -12,7 +13,6 @@ require (
 
 require (
 	charm.land/bubbles/v2 v2.1.1 // indirect
-	charm.land/bubbletea/v2 v2.0.10 // indirect
 	charm.land/lipgloss/v2 v2.0.5 // indirect
 	github.com/aymanbagabas/go-osc52/v2 v2.0.1 // indirect
 	github.com/charmbracelet/colorprofile v0.4.3 // indirect

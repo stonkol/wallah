@@ -79,4 +79,6 @@ func printList() {
 		}
 	}
 	fmt.Println()
+	fmt.Println()
+	fmt.Println()
 }

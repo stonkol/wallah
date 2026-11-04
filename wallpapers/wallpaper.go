@@ -9,7 +9,6 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
-	"runtime"
 	"sort"
 	"strconv"
 	"strings"
@@ -25,25 +24,26 @@ var palette = map[string]Palette{
 	"cyan": {"#4f4f4f", "#00cdcd"}, "green": {"#ffffff", "#00dd00"},
 	"magenta": {"#ffffff", "#cd00cd"}, "red": {"#ffffff", "#cd0000"},
 	"yellow": {"#4f4f4f", "#cdcd00"}, "white": {"#4f4f4f", "#e5e5e5"},
-	"black-b": {"#ffffff", "#7f7f7f"}, "blue-b": {"#ffffff", "#5c5cff"},
-	"cyan-b": {"#4f4f4f", "#00ffff"}, "green-b": {"#ffffff", "#00ff00"},
-	"magenta-b": {"#ffffff", "#ff00ff"}, "red-b": {"#ffffff", "#ff0000"},
-	"yellow-b": {"#4f4f4f", "#ffff00"}, "white-b": {"#4f4f4f", "#ffffff"},
-	"orange": {"#fff", "#ff5516"}, "orange-b": {"#fff", "#ff7e23"},
+	"black-l": {"#ffffff", "#7f7f7f"}, "blue-l": {"#ffffff", "#5c5cff"},
+	"cyan-l": {"#4f4f4f", "#00ffff"}, "green-l": {"#ffffff", "#00ff00"},
+	"magenta-l": {"#ffffff", "#ff00ff"}, "red-l": {"#ffffff", "#ff0000"},
+	"yellow-l": {"#4f4f4f", "#ffff00"}, "white-l": {"#4f4f4f", "#ffffff"},
+	"orange": {"#fff", "#ff5516"}, "orange-l": {"#fff", "#ff7e23"},
 	"akira": {"#fff", "#ab2f1a"}, "blender": {"#fff", "#a2bcd0"},
 	"grimace": {"#fff", "#6a1c63"}, "kirby": {"#fff", "#fc5c8e"},
 	"pikachu": {"#fff", "#f8a21c"}, "stitchy": {"#fff", "#527bac"},
 	"teddy": {"#fff", "#925923"}, "yoshi": {"#fff", "#43a934"},
-	"akira-b": {"#fff", "#df2626"}, "blender-b": {"#fff", "#c2d6e2"},
-	"grimace-b": {"#fff", "#8e1e8c"}, "kirby-b": {"#fff", "#f49792"},
-	"pikachu-b": {"#fff", "#f4db06"}, "stitchy-b": {"#fff", "#69b8dc"},
-	"teddy-b": {"#fff", "#d09249"}, "yoshi-b": {"#fff", "#69c12b"},
+	"akira-l": {"#fff", "#df2626"}, "blender-l": {"#fff", "#c2d6e2"},
+	"grimace-l": {"#fff", "#8e1e8c"}, "kirby-l": {"#fff", "#f49792"},
+	"pikachu-l": {"#fff", "#f4db06"}, "stitchy-l": {"#fff", "#69b8dc"},
+	"teddy-l": {"#fff", "#d09249"}, "yoshi-l": {"#fff", "#69c12b"},
 }
 
 type DisplaySettings struct {
-	Device       string
-	MenuBarColor string
-	CornerStyle  string
+	Device                  string
+	MenuBarColor            string
+	CornerStyle             string
+	MenuBarMatchesWallpaper bool
 }
 
 // Names returns the available wallpaper colors in sorted order.
@@ -128,7 +128,8 @@ func GeneratePreviews() ([]string, error) {
 		{device: "mbp-16", color: "blue"},
 	}
 
-	paths := make([]string, 0, len(previews))
+	cornerStyles := []string{"macos26", "macos15", "macosx"}
+	paths := make([]string, 0, len(previews)*len(cornerStyles)*2)
 	for _, preview := range previews {
 		colors := palette[preview.color]
 		base, err := parseHexColor(colors.Background)
@@ -139,20 +140,25 @@ func GeneratePreviews() ([]string, error) {
 		if err != nil {
 			return nil, fmt.Errorf("parse preview menu bar color: %w", err)
 		}
-		display := DisplaySettings{
-			Device:       preview.device,
-			MenuBarColor: "#000000",
-			CornerStyle:  "macos26",
+		for _, cornerStyle := range cornerStyles {
+			for _, menuBarMatchesWallpaper := range []bool{false, true} {
+				display := DisplaySettings{
+					Device:                  preview.device,
+					MenuBarColor:            "#000000",
+					CornerStyle:             cornerStyle,
+					MenuBarMatchesWallpaper: menuBarMatchesWallpaper,
+				}
+				img, err := render(base, menu, display)
+				if err != nil {
+					return nil, fmt.Errorf("render %s %s preview: %w", preview.device, cornerStyle, err)
+				}
+				path, err := savePreviewImage(preview.device, cornerStyle, menuBarMatchesWallpaper, img)
+				if err != nil {
+					return nil, fmt.Errorf("save %s %s preview: %w", preview.device, cornerStyle, err)
+				}
+				paths = append(paths, path)
+			}
 		}
-		img, err := render(base, menu, display)
-		if err != nil {
-			return nil, fmt.Errorf("render %s preview: %w", preview.device, err)
-		}
-		path, err := savePreviewImage(preview.device, img)
-		if err != nil {
-			return nil, fmt.Errorf("save %s preview: %w", preview.device, err)
-		}
-		paths = append(paths, path)
 	}
 	return paths, nil
 }
@@ -166,17 +172,20 @@ func saveGeneratedImage(colorName string, display DisplaySettings, img image.Ima
 	return saveImage(wallpaperDir, colorName, display, img)
 }
 
-func savePreviewImage(device string, img image.Image) (string, error) {
-	_, sourceFile, _, ok := runtime.Caller(0)
-	if !ok {
-		return "", fmt.Errorf("find project source directory for wallpaper previews")
+func savePreviewImage(device, cornerStyle string, menuBarMatchesWallpaper bool, img image.Image) (string, error) {
+	homeDir, err := os.UserHomeDir()
+	if err != nil {
+		return "", fmt.Errorf("find home directory for wallpaper previews: %w", err)
 	}
-	projectWallpapersDir := filepath.Dir(sourceFile)
-	previewDir := filepath.Join(projectWallpapersDir, "previews")
+	previewDir := filepath.Join(homeDir, "Downloads", "previews")
 	if err := os.MkdirAll(previewDir, 0o700); err != nil {
 		return "", fmt.Errorf("create wallpaper preview directory: %w", err)
 	}
-	path := filepath.Join(previewDir, device+".png")
+	filename := cornerStyle + "-" + device + ".png"
+	if menuBarMatchesWallpaper {
+		filename = cornerStyle + "-transparent-" + device + ".png"
+	}
+	path := filepath.Join(previewDir, filename)
 	if err := savePNG(path, previewDir, img); err != nil {
 		return "", err
 	}
@@ -187,11 +196,16 @@ func saveImage(wallpaperDir, colorName string, display DisplaySettings, img imag
 	if err := os.MkdirAll(wallpaperDir, 0o700); err != nil {
 		return "", fmt.Errorf("create wallpaper directory: %w", err)
 	}
-	radius := "r20"
-	if display.CornerStyle == "macos26" {
+	radius := "r0"
+	if display.CornerStyle == "macos15" {
+		radius = "r20"
+	} else if display.CornerStyle == "macos26" {
 		radius = "r52"
 	}
 	filename := fmt.Sprintf("%s-%s-%s-%s-%s.png", colorName, display.Device, strings.TrimPrefix(display.MenuBarColor, "#"), display.CornerStyle, radius)
+	if display.MenuBarMatchesWallpaper {
+		filename = strings.TrimSuffix(filename, ".png") + "-transparent.png"
+	}
 	path := filepath.Join(wallpaperDir, filename)
 	if err := savePNG(path, wallpaperDir, img); err != nil {
 		return "", err
@@ -224,11 +238,14 @@ func render(base, menu color.RGBA, display DisplaySettings) (*image.RGBA, error)
 	if err != nil {
 		return nil, err
 	}
-	if display.CornerStyle != "macos26" && display.CornerStyle != "macos15" {
+	if display.CornerStyle != "macos26" && display.CornerStyle != "macos15" && display.CornerStyle != "macosx" {
 		return nil, fmt.Errorf("unknown corner style %q", display.CornerStyle)
 	}
 
 	img := image.NewRGBA(image.Rect(0, 0, width, height))
+	if display.MenuBarMatchesWallpaper {
+		menu = base
+	}
 	for y := 0; y < height; y++ {
 		for x := 0; x < width; x++ {
 			img.SetRGBA(x, y, menu)
@@ -238,8 +255,10 @@ func render(base, menu color.RGBA, display DisplaySettings) (*image.RGBA, error)
 	// Round the wallpaper area below the menu bar. The menu color remains
 	// visible outside its top corners, matching the background behind the notch.
 	left, right := 0, width
-	radius := 20.0
-	if display.CornerStyle == "macos26" {
+	radius := 0.0
+	if display.CornerStyle == "macos15" {
+		radius = 20.0
+	} else if display.CornerStyle == "macos26" {
 		radius = 52.0
 	}
 	// On a 14-inch MacBook Pro, the 66 px menu bar leaves 1898 px below it.
@@ -267,7 +286,7 @@ func blend(foreground, background color.RGBA, coverage float64) color.RGBA {
 		R: uint8(float64(foreground.R)*coverage + float64(background.R)*(1-coverage)),
 		G: uint8(float64(foreground.G)*coverage + float64(background.G)*(1-coverage)),
 		B: uint8(float64(foreground.B)*coverage + float64(background.B)*(1-coverage)),
-		A: 255,
+		A: uint8(float64(foreground.A)*coverage + float64(background.A)*(1-coverage)),
 	}
 }
 

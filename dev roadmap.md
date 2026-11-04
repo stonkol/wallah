@@ -9,7 +9,7 @@ go run . blue    # set a blue wallpaper
 
 ### Preview wallahs
 
-It generates four sample PNGs with distinct colors for the MacBook Pro 14″ and 16″ and MacBook Air 13″ and 15″.
+It generates previews in `~/Downloads/previews` with distinct colors for all four supported MacBook sizes, using macOS 26 (round), macOS 15 (less round), and macOS X (square corners). Each style has a solid black menu bar preview and a wallpaper-color menu bar preview. Filenames start with the style, for example `macos26-mbp-14.png` and `macos26-transparent-mbp-14.png`.
 ```sh
 wallah preview
 ```
@@ -49,7 +49,7 @@ fpath=(~/.zsh/completions $fpath)
 autoload -Uz compinit && compinit
 ```
 
-Now type `wallah blu` and press **Tab**. It should complete `blue` or offer `blue-b`.
+Now type `wallah blu` and press **Tab**. It should complete `blue` or offer `blue-l`.
 
 To keep completion working in new terminal sessions, add these lines to `~/.zshrc`:
 
@@ -83,10 +83,11 @@ Then source it: `source ~/.zshrc`
         2. Macbook Pro 16"
         3. MacBook Air 13"
         4. MacBook Air 15"
-    - [x] Then choose if the wallpaper will have a [black/white/choose a color] top menu bar.
+    - [x] Then choose if the wallpaper will have a black, white, wallpaper-matching, or custom-color top menu bar.
     - [x] then chosse the corner border 
         - [x] macOS 26 (rounder)
         - [x] macOS 15
+        - [x] macOS X (square corners)
     - Previously all the wallpapers where already made by a graphic editor, but now i want this Go app to make the wallpaper image in real time when the user input the color, so it will clip mask the wallpaper to a be according to the user selected MacBook. So it will have a menu bar part in according to waht the user have selected and the other part of the wallpaper as what the user have selected. And then make corner borders like in macOS 26 which is more rounder or before (less rounder).
     - after user have selected these three parameters, tell the user that now can select colors from the list above, showing the printList. these three settings above will be saved, and the user will only need to type a color next time it uses wallah, but if uses in the future type `wallah -s` or `wallah --settings` it will appear again the init prompt
 
@@ -104,9 +105,11 @@ Then source it: `source ~/.zshrc`
 ### Light / Dark mode
 
 - [x] Let users set the wallpaper for dark mode and light mode, which will change according to the system settings.
+- [x] change `-b` for the wallpapers namings to `-l`
 - [ ] Include a `-d` `--dark` and `-l` `--light` flags for toggling mode
+- [ ] Adaptive Colors (specify color options for light and dark mode)
 - [ ] Let user enable/disable auto-light/dark mode.
-- [ ] Change toggle dark mode of the wall (between [color] and [color]-b) according to system settings.
+- [ ] Change toggle dark mode of the wall (between [color] and [color]-l) according to system settings.
 
 ### Future Features
 
@@ -120,15 +123,12 @@ Then source it: `source ~/.zshrc`
 
 ##### Colors
 
-- [ ] ANSI 16/256 support
-- [ ] True Color (HEX) support
-- [ ] Adaptive Colors (specify color options for light and dark mode)
+- [x] True Color (HEX) support
 - [ ] Apply color themes - [ghostty](/Applications/Ghostty.app/Contents/Resources/ghostty/themes/GitLab-Dark) have a big collection
     - e.g: Catppuccin for the ANSI 16 colors
     - `wallah red -t catppuccin` it will apply the red of Catppuccin
     - also can set the default theme: `wallah --set-theme catppuccin`
 - [ ] Gradient support (user input 2 to 3 colors and the direction)
-- [ ] Adaptive Gradient support
 
 > [!info] Adaptive Gradient
 > same as gradient but will change depending on the sun, like the native wallpaper on macOS

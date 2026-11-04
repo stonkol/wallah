@@ -10,9 +10,10 @@ import (
 )
 
 type Config struct {
-	Device       string `json:"device"`
-	MenuBarColor string `json:"menu_bar_color"`
-	CornerStyle  string `json:"corner_style"`
+	Device                  string `json:"device"`
+	MenuBarColor            string `json:"menu_bar_color"`
+	MenuBarMatchesWallpaper bool   `json:"transparent_menu_bar,omitempty"`
+	CornerStyle             string `json:"corner_style"`
 }
 
 var devices = map[string]struct{}{
@@ -63,7 +64,7 @@ func (c Config) Validate() error {
 	if _, err := strconv.ParseUint(hexColor, 16, 24); err != nil {
 		return fmt.Errorf("invalid menu bar color %q", c.MenuBarColor)
 	}
-	if c.CornerStyle != "macos26" && c.CornerStyle != "macos15" {
+	if c.CornerStyle != "macos26" && c.CornerStyle != "macos15" && c.CornerStyle != "macosx" {
 		return fmt.Errorf("unknown corner style %q", c.CornerStyle)
 	}
 	return nil

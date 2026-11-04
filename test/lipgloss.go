@@ -18,7 +18,7 @@ func main() {
 		Padding(0, 1) // top/bottom, left/right padding
 
 	// Render styled text with padding spaces
-	styledText := redBg.Render("red-b")
+	styledText := redBg.Render("red-l")
 
 	fmt.Printf("Your wallah is %s 🤟\n", styledText)
 
@@ -27,7 +27,7 @@ func main() {
 		Border(lipgloss.NormalBorder()).
 		BorderForeground(lipgloss.Color("#ff0000")).
 		Padding(0, 1).
-		Render("red-b")
+		Render("red-l")
 	fmt.Println(bordered)
 
 	var hello = lipgloss.NewStyle().

@@ -17,6 +17,8 @@ It is a minimal alternative to the app [Top Notch](https://topnotch.app/), and i
 
 ### Installation
 
+> This cli app requires Go 1.27.3, which its current macOS requirement is Ventura 13 or later.
+
 You need to have Go installed. This command will compile and install the CLI tool in your system PATH.
 ```sh
 go install github.com/stonkol/wallah@latest
@@ -78,7 +80,7 @@ wallah -p        # set previous wallpaper
 wallah -l        # show list of colors available
 
 wallah blue      # set blue (#0000EE)
-wallah blue-b    # set bright blue (#5C5CFF)
+wallah blue-l    # set light blue (#5C5CFF)
 wallah pikachu   # set pikachu color (#F8A21C)
 wallah f60       # set a custom short hex color (#ff6600)
 wallah ff6600    # set a custom hex color (#ff6600)
@@ -109,12 +111,12 @@ Show list: `wallah -l`
 Example of one of the wallpapers (bright blue):
 
 <div align="center">
-<img src="wallpapers/mbp-14/blue-b.png" width="50%">
+<img src="wallpapers/mbp-14/blue-l.png" width="50%">
 </div>
 
 ### 2.1 ANSI 16
 
-The basic 8 colors, by default, is the dark mode version. Add `b-` prefix for bright (light) versions (`b-blue`).
+The basic 8 colors are the dark versions. Add the `-l` suffix for light versions (`blue-l`).
 
 `black`, `blue`, `cyan`, `green`, `magenta`, `red`, `yellow` and `white`.
 
@@ -124,7 +126,7 @@ The basic 8 colors, by default, is the dark mode version. Add `b-` prefix for br
 
 ### 2.2 CHAR 16
 
-Based on 8 famous characters, each with their own light and dark mode. Add `b-` prefix for bright (light) versions (`b-pikachu`).
+Based on 8 famous characters, each with their own light and dark mode. Add the `-l` suffix for light versions (`pikachu-l`).
 
 `akira`, `blender`, `grimace`, `kirby`, `pikachu`, `stitchy`, `teddy` and `yoshi`.
 
@@ -139,12 +141,12 @@ Go to [here](dev-roadmap.md).
 ## 4. How it works
 
 - Wallah generates a PNG wallpaper for the selected Mac display and color at runtime.
-- The generated image uses your saved menu bar color and macOS 26 or macOS 15 corner style.
+- The generated image uses your saved menu bar color and selected corner style: macOS 26 (round, 52 px), macOS 15 (less round, 20 px), or macOS X (square corners). The **Transparent** menu bar choice fills the menu bar with the selected wallpaper color.
 - It applies the image on macOS by running AppleScript through `osascript` and Go's `os/exec` package.
 - Sample wallpapers and the original design files are kept in `wallpapers` and `design-files`.
 - There is a `design-files` directory with the design files (`.psd` and `.af`) used to create the wallpapers. Which you can use to create your own wallpapers, either with solid colors, gradients, or an image.
 -  The corner radius for macOS 26 version is set to be 52px, while the macOS 15 is 20px.
-- On first run, Wallah uses [Gum's `choose`](https://github.com/charmbracelet/gum#choose) picker for the Mac display, menu bar color, and screen corner style. The picker is compiled into Wallah, so no separate Gum installation is needed. Wallah saves these settings for future runs. Run `wallah -s` or `wallah --settings` to change them later. For a custom menu bar color, enter a listed color name or a hex value such as `#223344`.
+- On first run, Wallah shows a boxed settings menu for the Mac display, menu bar color (black, white, wallpaper color, or custom), and screen corner style. Use the arrow keys and Enter or Right to expand an item; select a value and then choose **Save and exit** or press `q` to save. Wallah saves these settings for future runs. Run `wallah -s` or `wallah --settings` to change them later. For a custom menu bar color, enter a listed color name or a hex value such as `#223344`.
 
 ## 5. Having issues
 
