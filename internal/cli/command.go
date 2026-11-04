@@ -5,8 +5,10 @@ import (
 	"math/rand"
 	"time"
 
+	"charm.land/gum/v2/choose"
 	"github.com/charmbracelet/lipgloss"
 	"github.com/spf13/cobra"
+	"github.com/stonkol/wallah/internal/settings"
 	"github.com/stonkol/wallah/wallpapers"
 )
 
@@ -44,7 +46,14 @@ func NewCommand() *cobra.Command {
 			if err != nil {
 				return err
 			}
+			settingsFlag, err := cmd.Flags().GetBool("settings")
+			if err != nil {
+				return err
+			}
 
+			if settingsFlag && len(args) != 0 {
+				return fmt.Errorf("no arguments allowed when using the settings flag")
+			}
 			if listFlag || versionFlag || randomFlag || previousFlag {
 				if len(args) != 0 {
 					return fmt.Errorf("no arguments allowed when using a flag")
@@ -81,9 +90,22 @@ func NewCommand() *cobra.Command {
 			if err != nil {
 				return fmt.Errorf("problem reading previous flag: %w", err)
 			}
+			settingsFlag, err := cmd.Flags().GetBool("settings")
+			if err != nil {
+				return fmt.Errorf("problem reading settings flag: %w", err)
+			}
 			allDesktops, err := cmd.Flags().GetBool("all")
 			if err != nil {
 				return fmt.Errorf("problem reading all flag: %w", err)
+			}
+
+			if settingsFlag {
+				if _, err := configure(cmd); err != nil {
+					return err
+				}
+				fmt.Fprintln(cmd.OutOrStdout(), "Settings saved. You can now choose a wallpaper color:")
+				printList()
+				return nil
 			}
 
 			if versionFlag || (len(args) == 1 && args[0] == "version") {
@@ -94,6 +116,21 @@ func NewCommand() *cobra.Command {
 			if listFlag || (len(args) == 1 && args[0] == "list") {
 				printList()
 				return nil
+			}
+
+			config, configured, err := settings.Load()
+			if err != nil {
+				return err
+			}
+			showedSetupList := false
+			if !configured {
+				config, err = configure(cmd)
+				if err != nil {
+					return err
+				}
+				fmt.Fprintln(cmd.OutOrStdout(), "Settings saved. You can now choose a wallpaper color:")
+				printList()
+				showedSetupList = true
 			}
 
 			colorName := ""
@@ -112,13 +149,18 @@ func NewCommand() *cobra.Command {
 			} else if len(args) == 1 {
 				colorName = args[0]
 			} else {
-				if err := cmd.Help(); err != nil {
-					return err
+				if !showedSetupList {
+					printList()
 				}
-				return fmt.Errorf("you must specify one color")
+				return nil
 			}
 
-			if err := wallpapers.Change(colorName, allDesktops); err != nil {
+			display := wallpapers.DisplaySettings{
+				Device:       config.Device,
+				MenuBarColor: config.MenuBarColor,
+				CornerStyle:  config.CornerStyle,
+			}
+			if err := wallpapers.Change(colorName, display, allDesktops); err != nil {
 				return fmt.Errorf("error changing the wallah to '%s': %w", colorName, err)
 			}
 			if err := recordColor(colorName); err != nil {
@@ -134,10 +176,54 @@ func NewCommand() *cobra.Command {
 	rootCmd.Flags().BoolP("random", "r", false, "set a random wallpaper color")
 	rootCmd.Flags().BoolP("previous", "p", false, "restore the previous wallpaper color")
 	rootCmd.Flags().BoolP("all", "a", false, "set the wallpaper on every desktop")
+	rootCmd.Flags().BoolP("settings", "s", false, "run the display setup again")
+	rootCmd.AddCommand(&cobra.Command{
+		Use:   "preview",
+		Short: "generate sample wallpapers for all supported MacBook displays",
+		Args:  cobra.NoArgs,
+		RunE: func(cmd *cobra.Command, args []string) error {
+			paths, err := wallpapers.GeneratePreviews()
+			if err != nil {
+				return err
+			}
+			for _, path := range paths {
+				fmt.Fprintln(cmd.OutOrStdout(), path)
+			}
+			return nil
+		},
+	})
+	rootCmd.AddCommand(&cobra.Command{
+		Use:    "__wallah-choose <header> <option>...",
+		Hidden: true,
+		Args:   cobra.MinimumNArgs(2),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			return (choose.Options{
+				Header:    args[0],
+				Options:   args[1:],
+				Limit:     1,
+				Height:    10,
+				Cursor:    "> ",
+				ShowHelp:  true,
+				Padding:   "0",
+				StripANSI: true,
+			}).Run()
+		},
+	})
 	rootCmd.SetHelpTemplate(customHelpTemplate)
 	rootCmd.SilenceErrors = true
 	rootCmd.SilenceUsage = true
 	return rootCmd
+}
+
+func configure(cmd *cobra.Command) (settings.Config, error) {
+	config, err := promptSettings(cmd.InOrStdin(), cmd.OutOrStdout())
+	if err != nil {
+		return settings.Config{}, err
+	}
+	if err := settings.Save(config); err != nil {
+		return settings.Config{}, err
+	}
+	return config, nil
 }
 
 // Execute runs the CLI using the current process arguments.

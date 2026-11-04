@@ -70,18 +70,20 @@ sudo chmod +x /usr/local/bin/wallah # make the file executable
 
 ### 1.3 Try it out
 
+On first run, Wallah uses [Gum's `choose`](https://github.com/charmbracelet/gum#choose) picker for the Mac display, menu bar color, and screen corner style. The picker is compiled into Wallah, so no separate Gum installation is needed. Wallah saves these settings for future runs. Run `wallah -s` or `wallah --settings` to change them later. For a custom menu bar color, enter a listed color name or a hex value such as `#223344`.
+
 ```sh
 wallah -h        # show help
 wallah -v        # show version
+wallah -s        # to change user settings  
+wallah -p        # set previous wallpaper
+wallah -a red    # applies a red wallpaper to every desktop
 
 wallah -l        # show list of colors available
 wallah -r        # set a random color
 wallah blue      # set blue (#0000EE)
 wallah blue-b    # set bright blue (#5C5CFF)
 wallah pikachu   # set pikachu color (#F8A21C)
-
-wallah -p        # set previous wallpaper
-wallah -a red    # applies a red wallpaper to every desktop
 ```
 
 ### 1.4 Visuals
@@ -93,6 +95,13 @@ Set a wallpaper: `wallah akira`
 </div>
 
 Show list: `wallah -l`
+
+<div align="center">
+</br>
+<p>Colors available</p>
+<img src="assets/color-list.jpg" width="66%">
+
+</div>
 
 ## 2. Colors included
 
@@ -128,10 +137,12 @@ Go to [here](dev-roadmap.md).
 
 ## 4. How it works
 
-- Using `osascript` command to change the color of the wallpaper on macOS.
-- It runs AppleScript from Go using the `os/exec` package.
-- All the default wallpapers are located in the `wallpapers` directory.
-- There is a `design-files` directory with the design files (`.psd` and `.afdesign`) used to create the wallpapers. Which you can use to create your own wallpapers, either with solid colors, gradients, or an image.
+- Wallah generates a PNG wallpaper for the selected Mac display and color at runtime.
+- The generated image uses your saved menu bar color and macOS 26 or macOS 15 corner style.
+- It applies the image on macOS by running AppleScript through `osascript` and Go's `os/exec` package.
+- Sample wallpapers and the original design files are kept in `wallpapers` and `design-files`.
+- There is a `design-files` directory with the design files (`.psd` and `.af`) used to create the wallpapers. Which you can use to create your own wallpapers, either with solid colors, gradients, or an image.
+-  The corner radius for macOS 26 version is set to be 52px, while the macOS 15 is 20px.
 
 ## 5. Having issues
 

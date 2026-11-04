@@ -6,18 +6,19 @@ import (
 	"fmt"
 
 	"github.com/charmbracelet/lipgloss"
+	"github.com/stonkol/wallah/wallpapers"
 )
 
 func printWall(colorName string) {
-	colors, ok := colorStyles[colorName]
+	colors, ok := wallpapers.Color(colorName)
 	if !ok {
 		// fallback: print plain text if color not found
 		fmt.Printf("Your wallah is %s 🤟\n", colorName)
 		return
 	}
 
-	fg := lipgloss.Color(colors[0])
-	bg := lipgloss.Color(colors[1])
+	fg := lipgloss.Color(colors.Foreground)
+	bg := lipgloss.Color(colors.Background)
 	black := lipgloss.Color("#000")
 
 	wallahTopText := lipgloss.NewStyle().

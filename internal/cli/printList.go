@@ -8,6 +8,7 @@ import (
 	"strings"
 
 	"github.com/charmbracelet/lipgloss"
+	"github.com/stonkol/wallah/wallpapers"
 	"golang.org/x/term"
 )
 
@@ -37,8 +38,8 @@ func printList() {
 	maxLabelWidth := 0
 	for _, name := range wallpaperOrder {
 		fg, bg := "#fff", "#000" // default colors
-		if c, ok := colorStyles[name]; ok {
-			fg, bg = c[0], c[1]
+		if c, ok := wallpapers.Color(name); ok {
+			fg, bg = c.Foreground, c.Background
 		}
 		style := lipgloss.NewStyle().
 			// Bold(true).

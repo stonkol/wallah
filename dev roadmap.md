@@ -7,6 +7,13 @@ go run . -l      # to list colors
 go run . blue    # set a blue wallpaper
 ```
 
+### Preview wallahs
+
+It generates four sample PNGs with distinct colors for the MacBook Pro 14″ and 16″ and MacBook Air 13″ and 15″.
+```sh
+wallah preview
+```
+
 ## How to update 
 
 ### Update from local source
@@ -64,13 +71,27 @@ Then source it: `source ~/.zshrc`
 - [x] Include the 16 [ANSI colors](https://en.wikipedia.org/wiki/List_of_software_palettes)
 - [x] Make a logo to put on the top of the README on GitHub
 - [x] set random color for the wallah `-r` `--random`
-- [ ] change to previous color wallah `-p` `--previous`
-- [ ] set a wallpaper to all the desktops `-a` `--all`
-- [ ] have a gif of using wallah using a tape of [vhs](https://github.com/charmbracelet/vhs) in readme.
-- [ ] Let the user be able to have settings
-- [ ] autocompletion
+- [x] change to previous color wallah `-p` `--previous`
+- [x] set a wallpaper to all the desktops `-a` `--all`
+- [x] autocompletion
+
+#### Init select prompt
+
+- [ ] init prompt
+    - [ ] The first time the users runs wallah (when the user type `wallah`) will prompt them to select a device.
+        1. MacBook Pro 14"
+        2. Macbook Pro 16"
+        3. MacBook Air 13"
+        4. MacBook Air 15"
+    - [ ] Then choose if the wallpaper will have a [black/white/choose a color] top menu bar.
+    - [ ] then chosse the corner border 
+        - [ ] macOS 26 (rounder)
+        - [ ] macOS 15
+    - Previously all the wallpapers where already made by a graphic editor, but now i want this Go app to make the wallpaper image in real time when the user input the color, so it will clip mask the wallpaper to a be according to the user selected MacBook. So it will have a menu bar part in according to waht the user have selected and the other part of the wallpaper as what the user have selected. And then make corner borders like in macOS 26 which is more rounder or before (less rounder).
+    - after user have selected these three parameters, tell the user that now can select colors from the list above, showing the printList. these three settings above will be saved, and the user will only need to type a color next time it uses wallah, but if uses in the future type wallah -s or wallah --settings it will appear again the init prompt
+
 - [ ] update printwallah's wallahMenuBar for macos26 version which it will be a notch [color selected][notch][●][notch][color selected] instead of the [black][●][black]
-- [ ] if input `wallah mama`, easter egg appears
+
 
 ### Styling the cli
 
@@ -78,6 +99,7 @@ Then source it: `source ~/.zshrc`
 - [x] Have colored text on the CLI
 - [x] have multiple columns to show the list
 - [x] have a styled list
+- [ ] have a gif of using wallah using a tape of [vhs](https://github.com/charmbracelet/vhs) in readme.
 
 ### Light / Dark mode
 
@@ -93,12 +115,8 @@ Then source it: `source ~/.zshrc`
 - [ ] Let users change the wallpaper to an image
     - [ ] apply de-notch to the wallpaper
 
-#### Init select prompt
-
-The first time the users runs wallah will prompt them to select a device. Then choose if the wallpaper will have a [black/white/choose a color] top menu bar or without.
-
 #### Dynamic Wallpaper Creator
-based on users input color
+- [ ] based on users input color
 
 ##### Colors
 
@@ -116,12 +134,10 @@ based on users input color
 > same as gradient but will change depending on the sun, like the native wallpaper on macOS
 
 ##### Device support
-- [ ] no-notch devices
 - [ ] 14" and 16" MacBook Pro
 - [ ] 13" and 15" MacBook Air
-
+- [ ] no-notch devices
 - [ ] Linux support
 
-#### Animations
-
-- [ ] When changing the wallpaper
+### More
+- [ ] if input `wallah mama`, easter egg appears
