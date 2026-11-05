@@ -248,14 +248,15 @@ func (m settingsMenuModel) View() tea.View {
 	rightLines := m.rightPaneLines()
 	const contentRows = 6 // Keep the box height steady across all display choices.
 	lineCount := max(contentRows, len(leftItems))
-	for i := 0; i < lineCount; i++ {
+	for i := range lineCount {
 		leftText := ""
 		if i < len(leftItems) {
 			leftText = leftItems[i]
 			cursorIndex := i
-			if i == 3 {
+			switch i {
+			case 3:
 				cursorIndex = -1
-			} else if i == 4 {
+			case 4:
 				cursorIndex = 3
 			}
 			if cursorIndex == m.cursor {

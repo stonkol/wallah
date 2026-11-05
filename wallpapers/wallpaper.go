@@ -62,6 +62,12 @@ func Color(name string) (Palette, bool) {
 	if ok {
 		return c, true
 	}
+	if before, ok0 := strings.CutSuffix(name, "-b"); ok0 {
+		c, ok = palette[before+"-l"]
+		if ok {
+			return c, true
+		}
+	}
 	parsed, err := parseHexColor(name)
 	if err != nil {
 		return Palette{}, false
@@ -82,7 +88,16 @@ func Change(colorName string, display DisplaySettings, allDesktops bool) error {
 		return fmt.Errorf("invalid color %q: use a named color or a 3 or 6 digit hex value", colorName)
 	}
 	if _, named := palette[colorName]; !named {
-		colorName = colors.Background
+		if before, ok0 := strings.CutSuffix(colorName, "-b"); ok0 {
+			legacyTarget := before + "-l"
+			if _, exists := palette[legacyTarget]; exists {
+				colorName = legacyTarget
+			} else {
+				colorName = colors.Background
+			}
+		} else {
+			colorName = colors.Background
+		}
 	}
 	wallpaperColor, err := parseHexColor(colors.Background)
 	if err != nil {
@@ -199,9 +214,10 @@ func saveImage(wallpaperDir, colorName string, display DisplaySettings, img imag
 		return "", fmt.Errorf("create wallpaper directory: %w", err)
 	}
 	radius := "r0"
-	if display.CornerStyle == "macos15" {
+	switch display.CornerStyle {
+	case "macos15":
 		radius = "r20"
-	} else if display.CornerStyle == "macos26" {
+	case "macos26":
 		radius = "r52"
 	}
 	filename := fmt.Sprintf("%s-%s-%s-%s-%s.png", colorName, display.Display, strings.TrimPrefix(display.MenuBarColor, "#"), display.CornerStyle, radius)
@@ -248,8 +264,8 @@ func render(base, menu color.RGBA, display DisplaySettings) (*image.RGBA, error)
 	if display.MenuBarMatchesWallpaper {
 		menu = base
 	}
-	for y := 0; y < height; y++ {
-		for x := 0; x < width; x++ {
+	for y := range height {
+		for x := range width {
 			img.SetRGBA(x, y, menu)
 		}
 	}
@@ -258,9 +274,10 @@ func render(base, menu color.RGBA, display DisplaySettings) (*image.RGBA, error)
 	// visible outside its top corners, matching the background behind the notch.
 	left, right := 0, width
 	radius := 0.0
-	if display.CornerStyle == "macos15" {
+	switch display.CornerStyle {
+	case "macos15":
 		radius = 20.0
-	} else if display.CornerStyle == "macos26" {
+	case "macos26":
 		radius = 52.0
 	}
 	// On a 14-inch MacBook Pro, the 66 px menu bar leaves 1898 px below it.
@@ -322,8 +339,8 @@ func inCornerRegion(x, y, left, top, right, bottom int, radius float64) bool {
 func cornerCoverage(x, y, left, top, right, bottom int, radius float64) float64 {
 	const samples = 4
 	inside := 0
-	for sy := 0; sy < samples; sy++ {
-		for sx := 0; sx < samples; sx++ {
+	for sy := range samples {
+		for sx := range samples {
 			px := float64(x) + (float64(sx)+0.5)/samples
 			py := float64(y) + (float64(sy)+0.5)/samples
 			if insideRoundedRect(px, py, float64(left), float64(top), float64(right), float64(bottom), radius) {

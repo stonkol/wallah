@@ -5,6 +5,9 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"strings"
+
+	"github.com/stonkol/wallah/wallpapers"
 )
 
 type colorHistory struct {
@@ -37,7 +40,20 @@ func loadColorHistory() (colorHistory, error) {
 	if err := json.Unmarshal(data, &history); err != nil {
 		return colorHistory{}, fmt.Errorf("decode color history: %w", err)
 	}
+	history.Current = migrateColorSuffix(history.Current)
+	history.Previous = migrateColorSuffix(history.Previous)
 	return history, nil
+}
+
+func migrateColorSuffix(name string) string {
+	if !strings.HasSuffix(name, "-b") {
+		return name
+	}
+	updated := strings.TrimSuffix(name, "-b") + "-l"
+	if _, ok := wallpapers.Color(updated); ok {
+		return updated
+	}
+	return name
 }
 
 func recordColor(color string) error {

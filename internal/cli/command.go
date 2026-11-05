@@ -13,7 +13,7 @@ import (
 	"github.com/stonkol/wallah/wallpapers"
 )
 
-const version = "0.2.8 🦜"
+var version = "0.2.8 🦜"
 
 const customHelpTemplate = `{{with (or .Long .Short)}}{{. | trimTrailingWhitespaces}}
 
@@ -28,8 +28,8 @@ Flags:
 func NewCommand() *cobra.Command {
 	rootCmd := &cobra.Command{
 		Use:   "wallah",
-		Short: "A fast and simple CLI to change your macOS wallpaper and elegantly hide that ugly notch.",
-		Long:  "\nHi, I'm Wallah. I will help you change your wallpaper to your desired color and get rid of that notch.\n\nWith Wallah, you can easily apply wallpapers featuring solid colors and rounded borders that blend seamlessly around the notch area.\n\n----- HOW TO USE -------\n\nExample:\n  wallah blue          Set a named wallpaper color\n  wallah ff6600        Set a custom hex color\n  wallah random        Randomly sets a wallpaper\n  wallah -l or list    List available colors\n  wallah -v or version Show the version",
+		Short: "A Go-powered CLI alternative to Top Notch for macOS wallpapers.",
+		Long:  "\nA lightweight, Go-powered CLI alternative to Top Notch. Choose your display and menu-bar color, set the corner style, and blend the menu bar into the notch on supported MacBooks.\n\n----- HOW TO USE -------\n\nExample:\n  wallah blue          Set a named wallpaper color\n  wallah ff6600        Set a custom hex color\n  wallah random        Randomly sets a wallpaper\n  wallah -l or list    List available colors\n  wallah -v or version Show the version",
 		Args: func(cmd *cobra.Command, args []string) error {
 			listFlag, err := cmd.Flags().GetBool("list")
 			if err != nil {
@@ -71,10 +71,22 @@ func NewCommand() *cobra.Command {
 				return nil, cobra.ShellCompDirectiveNoFileComp
 			}
 			completions := wallpapers.Names()
-			completions = append(completions, "random", "list", "version")
+			completions = append(completions, "random", "list", "version", "mama")
 			return completions, cobra.ShellCompDirectiveNoFileComp
 		},
 		RunE: func(cmd *cobra.Command, args []string) error {
+			if len(args) == 1 && args[0] == "mama" {
+				fmt.Fprintln(cmd.OutOrStdout(), `
+         .-=========-.
+        \\   M   M   //
+         \\  <3 <3  //
+          \\  __   //
+           '-------'
+
+   Mama says: nice wallpaper!`)
+				return nil
+			}
+
 			listFlag, err := cmd.Flags().GetBool("list")
 			if err != nil {
 				return fmt.Errorf("problem reading list flag: %w", err)

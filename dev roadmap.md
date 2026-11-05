@@ -95,14 +95,12 @@ Then source it: `source ~/.zshrc`
 
 - [ ] update printwallah's wallahMenuBar for macos26 version which it will be a notch [color selected][notch][●][notch][color selected] instead of the [black][●][black]
 
-
 ### Styling the cli
 
 - [x] Colors of 8 characters
 - [x] Have colored text on the CLI
 - [x] have multiple columns to show the list
 - [x] have a styled list
-- [ ] have a gif of using wallah using a tape of [vhs](https://github.com/charmbracelet/vhs) in readme.
 
 ### Light / Dark mode
 
@@ -116,7 +114,6 @@ Then source it: `source ~/.zshrc`
 ### Image
 
 - [ ] Let users change the wallpaper to an image
-    - [ ] apply de-notch to the wallpaper
 
 #### Colors
 
@@ -131,11 +128,9 @@ Then source it: `source ~/.zshrc`
 ##### Display support
 - [x] 14" and 16" MacBook Pro
 - [x] 13" and 15" MacBook Air
-- [ ] iMac 24" 4K
-- [ ] Studio Display 27" 5K
+- [x] iMac 24" 4.5K
+- [x] Studio Display 27" 5K
 - [ ] Custom
 
-- [ ] Linux support
-
 ### More
-- [ ] if input `wallah mama`, easter egg appears
+- [x] if input `wallah mama`, easter egg appears

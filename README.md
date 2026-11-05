@@ -7,21 +7,17 @@
 ![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/stonkol/wallah?sort=semver)
 ![Go Version](https://img.shields.io/github/go-mod/go-version/stonkol/wall-cli)
 ![Build Status](https://github.com/stonkol/wallah/actions/workflows/go.yml/badge.svg)
-[![Go Report Card](https://goreportcard.com/badge/github.com/stonkol/wall-cli)](https://goreportcard.com/report/github.com/stonkol/wall-cli)
 
 </div>
 
-wallah-cli is a CLI which you can change your macOS wallpaper, in which the menu bar part is black, in order to hide that ugly notch. Furthermore, it is less distracting if you have the menu bar auto-hide enabled.
-
-It is a minimal alternative to the app [Top Notch](https://topnotch.app/), and it is inspired by [removethenotch](removethenotch.com).
+A lightweight, Go-powered CLI alternative to [Top Notch](https://topnotch.app/). Choose your display and menu-bar color, set the corner style, and blend the menu bar into the notch on supported MacBooks.
 
 ### Supported Displays
 
 1. MacBook Pro 14" and 16" (2021 or later)
 2. MacBook Air 13" and 15" (2022 or later)
-3. iMac 24" 4K (2021 or later)
+3. iMac 24" 4.5K (2021 or later)
 4. Studio Display 27" 5K
-5. Custom (enter your own dimensions)
 
 ### Installation
 
