@@ -14,6 +14,10 @@ It generates previews in `~/Downloads/previews` with distinct colors for all six
 wallah preview
 ```
 
+## Git
+
+The release workflow now checks the subject of each commit pushed to main. If it starts with a version such as v0.3.3, it builds the macOS binaries and creates the GitHub Release and tag for that version. Other commits won’t publish a release.
+
 ## How to update 
 
 ### Update from local source

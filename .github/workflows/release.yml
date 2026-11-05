@@ -2,8 +2,8 @@ name: Release
 
 on:
   push:
-    tags:
-      - 'v*'
+    branches:
+      - main
 
 permissions:
   contents: write
@@ -14,19 +14,31 @@ jobs:
     steps:
       - uses: actions/checkout@v7
 
+      - name: Read release version from commit message
+        id: version
+        shell: bash
+        run: |
+          subject="$(git log -1 --pretty=%s)"
+          if [[ "$subject" =~ ^(v[0-9]+\.[0-9]+\.[0-9]+)([[:space:]:]|$) ]]; then
+            echo "tag=${BASH_REMATCH[1]}" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Set up Go
+        if: steps.version.outputs.tag != ''
         uses: actions/setup-go@v7
         with:
           go-version-file: go.mod
           cache: true
 
       - name: Build macOS binaries and create release
+        if: steps.version.outputs.tag != ''
         env:
           GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ steps.version.outputs.tag }}
         run: |
           set -euo pipefail
 
-          version="${GITHUB_REF_NAME#v}"
+          version="${RELEASE_TAG#v}"
           mkdir -p dist
 
           for arch in amd64 arm64; do
@@ -41,6 +53,7 @@ jobs:
           done
 
           (cd dist && sha256sum *.tar.gz > checksums.txt)
-          gh release create "$GITHUB_REF_NAME" dist/*.tar.gz dist/checksums.txt \
-            --title "$GITHUB_REF_NAME" \
+          gh release create "$RELEASE_TAG" dist/*.tar.gz dist/checksums.txt \
+            --target "$GITHUB_SHA" \
+            --title "$RELEASE_TAG" \
             --generate-notes
