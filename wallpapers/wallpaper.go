@@ -40,7 +40,7 @@ var palette = map[string]Palette{
 }
 
 type DisplaySettings struct {
-	Device                  string
+	Display                 string
 	MenuBarColor            string
 	CornerStyle             string
 	MenuBarMatchesWallpaper bool
@@ -115,17 +115,19 @@ func Change(colorName string, display DisplaySettings, allDesktops bool) error {
 	return nil
 }
 
-// GeneratePreviews renders one wallpaper for each supported device without
+// GeneratePreviews renders one wallpaper for each supported display without
 // applying any of them to the desktop.
 func GeneratePreviews() ([]string, error) {
 	previews := []struct {
-		device string
-		color  string
+		display string
+		color   string
 	}{
-		{device: "mba-15", color: "orange"},
-		{device: "mba-13", color: "green"},
-		{device: "mbp-14", color: "red"},
-		{device: "mbp-16", color: "blue"},
+		{display: "mba-15", color: "orange"},
+		{display: "mba-13", color: "green"},
+		{display: "mbp-14", color: "red"},
+		{display: "mbp-16", color: "blue"},
+		{display: "imac-24", color: "yellow"},
+		{display: "studio-27", color: "magenta"},
 	}
 
 	cornerStyles := []string{"macos26", "macos15", "macosx"}
@@ -143,18 +145,18 @@ func GeneratePreviews() ([]string, error) {
 		for _, cornerStyle := range cornerStyles {
 			for _, menuBarMatchesWallpaper := range []bool{false, true} {
 				display := DisplaySettings{
-					Device:                  preview.device,
+					Display:                 preview.display,
 					MenuBarColor:            "#000000",
 					CornerStyle:             cornerStyle,
 					MenuBarMatchesWallpaper: menuBarMatchesWallpaper,
 				}
 				img, err := render(base, menu, display)
 				if err != nil {
-					return nil, fmt.Errorf("render %s %s preview: %w", preview.device, cornerStyle, err)
+					return nil, fmt.Errorf("render %s %s preview: %w", preview.display, cornerStyle, err)
 				}
-				path, err := savePreviewImage(preview.device, cornerStyle, menuBarMatchesWallpaper, img)
+				path, err := savePreviewImage(preview.display, cornerStyle, menuBarMatchesWallpaper, img)
 				if err != nil {
-					return nil, fmt.Errorf("save %s %s preview: %w", preview.device, cornerStyle, err)
+					return nil, fmt.Errorf("save %s %s preview: %w", preview.display, cornerStyle, err)
 				}
 				paths = append(paths, path)
 			}
@@ -172,7 +174,7 @@ func saveGeneratedImage(colorName string, display DisplaySettings, img image.Ima
 	return saveImage(wallpaperDir, colorName, display, img)
 }
 
-func savePreviewImage(device, cornerStyle string, menuBarMatchesWallpaper bool, img image.Image) (string, error) {
+func savePreviewImage(display, cornerStyle string, menuBarMatchesWallpaper bool, img image.Image) (string, error) {
 	homeDir, err := os.UserHomeDir()
 	if err != nil {
 		return "", fmt.Errorf("find home directory for wallpaper previews: %w", err)
@@ -181,9 +183,9 @@ func savePreviewImage(device, cornerStyle string, menuBarMatchesWallpaper bool, 
 	if err := os.MkdirAll(previewDir, 0o700); err != nil {
 		return "", fmt.Errorf("create wallpaper preview directory: %w", err)
 	}
-	filename := cornerStyle + "-" + device + ".png"
+	filename := cornerStyle + "-" + display + ".png"
 	if menuBarMatchesWallpaper {
-		filename = cornerStyle + "-transparent-" + device + ".png"
+		filename = cornerStyle + "-transparent-" + display + ".png"
 	}
 	path := filepath.Join(previewDir, filename)
 	if err := savePNG(path, previewDir, img); err != nil {
@@ -202,7 +204,7 @@ func saveImage(wallpaperDir, colorName string, display DisplaySettings, img imag
 	} else if display.CornerStyle == "macos26" {
 		radius = "r52"
 	}
-	filename := fmt.Sprintf("%s-%s-%s-%s-%s.png", colorName, display.Device, strings.TrimPrefix(display.MenuBarColor, "#"), display.CornerStyle, radius)
+	filename := fmt.Sprintf("%s-%s-%s-%s-%s.png", colorName, display.Display, strings.TrimPrefix(display.MenuBarColor, "#"), display.CornerStyle, radius)
 	if display.MenuBarMatchesWallpaper {
 		filename = strings.TrimSuffix(filename, ".png") + "-transparent.png"
 	}
@@ -234,7 +236,7 @@ func savePNG(path, directory string, img image.Image) error {
 }
 
 func render(base, menu color.RGBA, display DisplaySettings) (*image.RGBA, error) {
-	width, height, err := dimensions(display.Device)
+	width, height, err := dimensions(display.Display)
 	if err != nil {
 		return nil, err
 	}
@@ -290,8 +292,8 @@ func blend(foreground, background color.RGBA, coverage float64) color.RGBA {
 	}
 }
 
-func dimensions(device string) (int, int, error) {
-	switch device {
+func dimensions(display string) (int, int, error) {
+	switch display {
 	case "mbp-14":
 		return 3024, 1964, nil
 	case "mbp-16":
@@ -300,8 +302,12 @@ func dimensions(device string) (int, int, error) {
 		return 2560, 1664, nil
 	case "mba-15":
 		return 2880, 1864, nil
+	case "imac-24":
+		return 4480, 2520, nil
+	case "studio-27":
+		return 5120, 2880, nil
 	default:
-		return 0, 0, fmt.Errorf("unknown device %q", device)
+		return 0, 0, fmt.Errorf("unknown display %q", display)
 	}
 }
 

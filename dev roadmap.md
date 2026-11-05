@@ -9,7 +9,7 @@ go run . blue    # set a blue wallpaper
 
 ### Preview wallahs
 
-It generates previews in `~/Downloads/previews` with distinct colors for all four supported MacBook sizes, using macOS 26 (round), macOS 15 (less round), and macOS X (square corners). Each style has a solid black menu bar preview and a wallpaper-color menu bar preview. Filenames start with the style, for example `macos26-mbp-14.png` and `macos26-transparent-mbp-14.png`.
+It generates previews in `~/Downloads/previews` with distinct colors for all six supported displays, using macOS 26 (round), macOS 15 (less round), and macOS X (square corners). Each style has a solid black menu bar preview and a wallpaper-color menu bar preview. Filenames start with the style, for example `macos26-mbp-14.png` and `macos26-transparent-mbp-14.png`.
 ```sh
 wallah preview
 ```
@@ -78,11 +78,13 @@ Then source it: `source ~/.zshrc`
 #### Init select prompt
 
 - [x] init prompt
-    - [x] The first time the users runs wallah (when the user type `wallah`) will prompt them to select a device.
+    - [x] The first time the users runs wallah (when the user type `wallah`) will prompt them to select a display.
         1. MacBook Pro 14"
         2. Macbook Pro 16"
         3. MacBook Air 13"
         4. MacBook Air 15"
+        5. iMac 24" 4.5K
+        6. Studio Display 27" 5K
     - [x] Then choose if the wallpaper will have a black, white, wallpaper-matching, or custom-color top menu bar.
     - [x] then chosse the corner border 
         - [x] macOS 26 (rounder)
@@ -111,32 +113,28 @@ Then source it: `source ~/.zshrc`
 - [ ] Let user enable/disable auto-light/dark mode.
 - [ ] Change toggle dark mode of the wall (between [color] and [color]-l) according to system settings.
 
-### Future Features
-
-#### Image
+### Image
 
 - [ ] Let users change the wallpaper to an image
     - [ ] apply de-notch to the wallpaper
 
-#### Dynamic Wallpaper Creator
-- [ ] based on users input color
-
-##### Colors
+#### Colors
 
 - [x] True Color (HEX) support
+- [ ] CSS colors namings
 - [ ] Apply color themes - [ghostty](/Applications/Ghostty.app/Contents/Resources/ghostty/themes/GitLab-Dark) have a big collection
     - e.g: Catppuccin for the ANSI 16 colors
     - `wallah red -t catppuccin` it will apply the red of Catppuccin
     - also can set the default theme: `wallah --set-theme catppuccin`
 - [ ] Gradient support (user input 2 to 3 colors and the direction)
 
-> [!info] Adaptive Gradient
-> same as gradient but will change depending on the sun, like the native wallpaper on macOS
+##### Display support
+- [x] 14" and 16" MacBook Pro
+- [x] 13" and 15" MacBook Air
+- [ ] iMac 24" 4K
+- [ ] Studio Display 27" 5K
+- [ ] Custom
 
-##### Device support
-- [ ] 14" and 16" MacBook Pro
-- [ ] 13" and 15" MacBook Air
-- [ ] no-notch devices
 - [ ] Linux support
 
 ### More

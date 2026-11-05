@@ -165,7 +165,7 @@ func NewCommand() *cobra.Command {
 			}
 
 			display := wallpapers.DisplaySettings{
-				Device:                  config.Device,
+				Display:                 config.Display,
 				MenuBarColor:            config.MenuBarColor,
 				MenuBarMatchesWallpaper: config.MenuBarMatchesWallpaper,
 				CornerStyle:             config.CornerStyle,

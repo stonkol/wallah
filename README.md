@@ -15,6 +15,14 @@ wallah-cli is a CLI which you can change your macOS wallpaper, in which the menu
 
 It is a minimal alternative to the app [Top Notch](https://topnotch.app/), and it is inspired by [removethenotch](removethenotch.com).
 
+### Supported Displays
+
+1. MacBook Pro 14" and 16" (2021 or later)
+2. MacBook Air 13" and 15" (2022 or later)
+3. iMac 24" 4K (2021 or later)
+4. Studio Display 27" 5K
+5. Custom (enter your own dimensions)
+
 ### Installation
 
 > This cli app requires Go 1.27.3, which its current macOS requirement is Ventura 13 or later.

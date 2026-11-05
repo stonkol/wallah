@@ -10,17 +10,38 @@ import (
 )
 
 type Config struct {
-	Device                  string `json:"device"`
+	Display                 string `json:"display"`
 	MenuBarColor            string `json:"menu_bar_color"`
 	MenuBarMatchesWallpaper bool   `json:"transparent_menu_bar,omitempty"`
 	CornerStyle             string `json:"corner_style"`
 }
 
-var devices = map[string]struct{}{
-	"mbp-14": {},
-	"mbp-16": {},
-	"mba-13": {},
-	"mba-15": {},
+var displays = map[string]struct{}{
+	"mbp-14":    {},
+	"mbp-16":    {},
+	"mba-13":    {},
+	"mba-15":    {},
+	"imac-24":   {},
+	"studio-27": {},
+}
+
+func (c *Config) UnmarshalJSON(data []byte) error {
+	type configAlias Config
+	var decoded configAlias
+	if err := json.Unmarshal(data, &decoded); err != nil {
+		return err
+	}
+	if decoded.Display == "" {
+		var legacy struct {
+			Device string `json:"device"`
+		}
+		if err := json.Unmarshal(data, &legacy); err != nil {
+			return err
+		}
+		decoded.Display = legacy.Device
+	}
+	*c = Config(decoded)
+	return nil
 }
 
 func Path() (string, error) {
@@ -54,8 +75,8 @@ func Load() (Config, bool, error) {
 }
 
 func (c Config) Validate() error {
-	if _, ok := devices[c.Device]; !ok {
-		return fmt.Errorf("unknown device %q", c.Device)
+	if _, ok := displays[c.Display]; !ok {
+		return fmt.Errorf("unknown display %q", c.Display)
 	}
 	hexColor := strings.TrimPrefix(c.MenuBarColor, "#")
 	if len(hexColor) != 6 {

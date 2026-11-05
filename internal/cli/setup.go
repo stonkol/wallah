@@ -29,15 +29,17 @@ type settingsMenuModel struct {
 	width        int
 }
 
-var deviceOptions = []string{
+var displayOptions = []string{
 	"MacBook Pro 14\"",
 	"MacBook Pro 16\"",
 	"MacBook Air 13\"",
 	"MacBook Air 15\"",
+	"iMac 24\" 4.5K",
+	"Studio Display 27\" 5K",
 }
 
 var menuBarOptions = []string{"Black", "White", "Transparent", "Custom"}
-var cornerOptions = []string{"macOS 26 (round)", "macOS 15 (less round)", "macOS X (square corners)"}
+var cornerOptions = []string{"macOS 26 (round)", "macOS 15 (less round)", "macOS X (squared)"}
 
 func promptSettings(in io.Reader, out io.Writer) (settings.Config, error) {
 	config, configured, err := settings.Load()
@@ -46,7 +48,7 @@ func promptSettings(in io.Reader, out io.Writer) (settings.Config, error) {
 	}
 	if !configured {
 		config = settings.Config{
-			Device:       "mbp-14",
+			Display:      "mbp-14",
 			MenuBarColor: "#000000",
 			CornerStyle:  "macos26",
 		}
@@ -93,7 +95,7 @@ func (m settingsMenuModel) Update(message tea.Msg) (tea.Model, tea.Cmd) {
 		case "enter":
 			color, err := normalizeMenuColor(m.colorInput)
 			if err != nil {
-				m.message = err.Error()
+				m.message = "Invalid color. Try again."
 				return m, nil
 			}
 			m.config.MenuBarColor = color
@@ -129,10 +131,14 @@ func (m settingsMenuModel) Update(message tea.Msg) (tea.Model, tea.Cmd) {
 		case "up", "k":
 			if m.option > 0 {
 				m.option--
+			} else {
+				m.option = len(options) - 1
 			}
 		case "down", "j":
 			if m.option < len(options)-1 {
 				m.option++
+			} else {
+				m.option = 0
 			}
 		case "esc", "left":
 			m.focusOptions = false
@@ -146,11 +152,15 @@ func (m settingsMenuModel) Update(message tea.Msg) (tea.Model, tea.Cmd) {
 	case "up", "k":
 		if m.cursor > 0 {
 			m.cursor--
+		} else {
+			m.cursor = 3
 		}
 		m.updateSection()
 	case "down", "j":
 		if m.cursor < 3 {
 			m.cursor++
+		} else {
+			m.cursor = 0
 		}
 		m.updateSection()
 	case "enter", "right", "space":
@@ -179,13 +189,15 @@ func (m *settingsMenuModel) updateSection() {
 func (m *settingsMenuModel) selectOption(choice string) {
 	switch m.section {
 	case 0:
-		deviceIDs := map[string]string{
-			"MacBook Pro 14\"": "mbp-14",
-			"MacBook Pro 16\"": "mbp-16",
-			"MacBook Air 13\"": "mba-13",
-			"MacBook Air 15\"": "mba-15",
+		displayIDs := map[string]string{
+			"MacBook Pro 14\"":       "mbp-14",
+			"MacBook Pro 16\"":       "mbp-16",
+			"MacBook Air 13\"":       "mba-13",
+			"MacBook Air 15\"":       "mba-15",
+			"iMac 24\" 4.5K":         "imac-24",
+			"Studio Display 27\" 5K": "studio-27",
 		}
-		m.config.Device = deviceIDs[choice]
+		m.config.Display = displayIDs[choice]
 	case 1:
 		switch choice {
 		case "Black":
@@ -219,7 +231,7 @@ func (m *settingsMenuModel) selectOption(choice string) {
 func (m settingsMenuModel) options() []string {
 	switch m.section {
 	case 0:
-		return deviceOptions
+		return displayOptions
 	case 1:
 		return menuBarOptions
 	case 2:
@@ -230,16 +242,23 @@ func (m settingsMenuModel) options() []string {
 }
 
 func (m settingsMenuModel) View() tea.View {
-	const leftWidth, rightWidth = 18, 41
+	const leftWidth, rightWidth, columnMargin = 27, 27, 2
 	lines := make([]string, 0, 12)
-	leftItems := []string{"Device", "Menubar", "Corner", "Save and exit"}
+	leftItems := []string{"Display", "Menubar", "Corner", "", "Save and exit"}
 	rightLines := m.rightPaneLines()
-	lineCount := max(len(leftItems), len(rightLines))
+	const contentRows = 6 // Keep the box height steady across all display choices.
+	lineCount := max(contentRows, len(leftItems))
 	for i := 0; i < lineCount; i++ {
 		leftText := ""
 		if i < len(leftItems) {
 			leftText = leftItems[i]
-			if i == m.cursor {
+			cursorIndex := i
+			if i == 3 {
+				cursorIndex = -1
+			} else if i == 4 {
+				cursorIndex = 3
+			}
+			if cursorIndex == m.cursor {
 				if !m.focusOptions && !m.editingColor {
 					leftText = "› " + leftText
 				}
@@ -252,20 +271,21 @@ func (m settingsMenuModel) View() tea.View {
 		if i < len(rightLines) {
 			rightText = rightLines[i]
 		}
-		leftColumn := lipgloss.NewStyle().Width(leftWidth).Align(lipgloss.Right).Render(leftText)
+		leftColumn := lipgloss.NewStyle().Width(leftWidth).Align(lipgloss.Right).Render(leftText + "  ")
 		rightColumn := lipgloss.NewStyle().Width(rightWidth).Align(lipgloss.Left).Render(rightText)
-		lines = append(lines, leftColumn+" │ "+rightColumn)
+		lines = append(lines, strings.Repeat(" ", columnMargin)+leftColumn+" │ "+rightColumn+strings.Repeat(" ", columnMargin))
 	}
 	lines = append(lines, "")
-	footer := "↑/↓ navigate • ←/→ select • Q save and exit"
+	footer := "↑/↓ navigate • → select • Q save and exit"
 	if m.focusOptions || m.editingColor {
-		footer = "↑/↓ choose • Enter apply • ← back • Ctrl+C cancel"
+		footer = "↑/↓ navigate • ← back • Enter apply • Ctrl+C cancel"
 	}
 	if m.editingColor {
 		footer = "Type color after # • Enter apply • Esc back"
 	}
-	lines = append(lines, lipgloss.PlaceHorizontal(62, lipgloss.Center, footer))
-	return tea.NewView(renderSettingsBox(lines, m.width))
+	box := renderSettingsBox(lines, m.width)
+	footerLine := lipgloss.PlaceHorizontal(m.width, lipgloss.Center, footer)
+	return tea.NewView(box + footerLine)
 }
 
 func (m settingsMenuModel) rightPaneLines() []string {
@@ -298,8 +318,8 @@ func (m settingsMenuModel) rightPaneLines() []string {
 }
 
 func renderSettingsBox(lines []string, terminalWidth int) string {
-	const innerWidth = 62
-	title := " Wallah settings "
+	const innerWidth = 61
+	title := " Wallah Settings "
 	remaining := innerWidth - lipgloss.Width(title)
 	left := remaining / 2
 	right := remaining - left
@@ -310,10 +330,7 @@ func renderSettingsBox(lines []string, terminalWidth int) string {
 		padded := lipgloss.NewStyle().Width(innerWidth).Render(line)
 		boxLines = append(boxLines, "│"+padded+"│")
 	}
-	boxLines = append(boxLines,
-		"│"+strings.Repeat(" ", innerWidth)+"│",
-		"╰"+strings.Repeat("─", innerWidth)+"╯",
-	)
+	boxLines = append(boxLines, "╰"+strings.Repeat("─", innerWidth)+"╯")
 	box := strings.Join(boxLines, "\n")
 	if terminalWidth > lipgloss.Width(box) {
 		box = lipgloss.PlaceHorizontal(terminalWidth, lipgloss.Center, box)
@@ -336,11 +353,13 @@ func (m settingsMenuModel) optionSelected(option string) bool {
 	switch m.section {
 	case 0:
 		return map[string]string{
-			"MacBook Pro 14\"": "mbp-14",
-			"MacBook Pro 16\"": "mbp-16",
-			"MacBook Air 13\"": "mba-13",
-			"MacBook Air 15\"": "mba-15",
-		}[option] == m.config.Device
+			"MacBook Pro 14\"":       "mbp-14",
+			"MacBook Pro 16\"":       "mbp-16",
+			"MacBook Air 13\"":       "mba-13",
+			"MacBook Air 15\"":       "mba-15",
+			"iMac 24\" 4.5K":         "imac-24",
+			"Studio Display 27\" 5K": "studio-27",
+		}[option] == m.config.Display
 	case 1:
 		if option == "Transparent" {
 			return m.config.MenuBarMatchesWallpaper
@@ -362,17 +381,19 @@ func (m settingsMenuModel) optionSelected(option string) bool {
 	return false
 }
 
-func (m settingsMenuModel) deviceLabel() string {
+func (m settingsMenuModel) displayLabel() string {
 	labels := map[string]string{
-		"mbp-14": "MacBook Pro 14\"",
-		"mbp-16": "MacBook Pro 16\"",
-		"mba-13": "MacBook Air 13\"",
-		"mba-15": "MacBook Air 15\"",
+		"mbp-14":    "MacBook Pro 14\"",
+		"mbp-16":    "MacBook Pro 16\"",
+		"mba-13":    "MacBook Air 13\"",
+		"mba-15":    "MacBook Air 15\"",
+		"imac-24":   "iMac 24\" 4.5K",
+		"studio-27": "Studio Display 27\" 5K",
 	}
-	if label := labels[m.config.Device]; label != "" {
+	if label := labels[m.config.Display]; label != "" {
 		return label
 	}
-	return "Select a device"
+	return "Select a display"
 }
 
 func (m settingsMenuModel) menuBarLabel() string {
@@ -391,7 +412,7 @@ func (m settingsMenuModel) menuBarLabel() string {
 
 func (m settingsMenuModel) cornerLabel() string {
 	if m.config.CornerStyle == "macosx" {
-		return "macOS X (square corners)"
+		return "macOS X (squared)"
 	}
 	if m.config.CornerStyle == "macos15" {
 		return "macOS 15 (less round)"
