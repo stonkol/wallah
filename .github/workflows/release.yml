@@ -19,8 +19,22 @@ jobs:
         shell: bash
         run: |
           subject="$(git log -1 --pretty=%s)"
-          if [[ "$subject" =~ ^(v[0-9]+\.[0-9]+\.[0-9]+)([[:space:]:]|$) ]]; then
-            echo "tag=${BASH_REMATCH[1]}" >> "$GITHUB_OUTPUT"
+          if [[ "$subject" =~ ^(v[0-9]+\.[0-9]+\.[0-9]+)([[:space:]:]+(.*))?$ ]]; then
+            tag="${BASH_REMATCH[1]}"
+            summary="${BASH_REMATCH[3]:-}"
+            summary="${summary#"${summary%%[![:space:]]*}"}"
+
+            if [[ "$summary" == *.* ]]; then
+              summary="${summary%%.*}."
+            fi
+
+            title="${tag#v}"
+            if [[ -n "$summary" ]]; then
+              title="$title $summary"
+            fi
+
+            printf 'tag=%s\n' "$tag" >> "$GITHUB_OUTPUT"
+            printf 'title=%s\n' "$title" >> "$GITHUB_OUTPUT"
           fi
 
       - name: Set up Go
@@ -35,6 +49,7 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
           RELEASE_TAG: ${{ steps.version.outputs.tag }}
+          RELEASE_TITLE: ${{ steps.version.outputs.title }}
         run: |
           set -euo pipefail
 
@@ -55,5 +70,5 @@ jobs:
           (cd dist && sha256sum *.tar.gz > checksums.txt)
           gh release create "$RELEASE_TAG" dist/*.tar.gz dist/checksums.txt \
             --target "$GITHUB_SHA" \
-            --title "$RELEASE_TAG" \
+            --title "$RELEASE_TITLE" \
             --generate-notes

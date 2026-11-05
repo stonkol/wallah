@@ -18,6 +18,8 @@ wallah preview
 
 The release workflow now checks the subject of each commit pushed to main. If it starts with a version such as v0.3.3, it builds the macOS binaries and creates the GitHub Release and tag for that version. Other commits won’t publish a release.
 
+The release workflow now uses the commit subject for the GitHub Release title. For v0.2.5 🍭 Add colors. add numbers, it creates the release titled 0.2.5 🍭 Add colors. It trims the leading v and cuts the summary at the first period. git diff --check passed.
+
 ## How to update 
 
 ### Update from local source
